@@ -31,7 +31,6 @@ public class Main {
 					System.out.println("잘못된 입력입니다. 다시 시도해주세요.");
 					System.out.print("> ");
 			}
-			
 		} while(input != 4);
 		
 		application.writeData();

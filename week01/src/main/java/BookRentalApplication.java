@@ -4,7 +4,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class BookRentalApplication {
-	Scanner scanner = new Scanner(System.in);
+	BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 	private static final String DATA_PATH = "week01/src/main/java/data/";
 	private final static File[] files = {new File(DATA_PATH+"physicalBooks.csv"), new File(DATA_PATH+"eBooks.csv"), new File(DATA_PATH+"audioBooks.csv")};
 	private final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSS");
@@ -104,11 +104,11 @@ public class BookRentalApplication {
 		}
 	}
 	
-	public void rentBook() {
+	public void rentBook() throws IOException {
 		System.out.print("유저 이름을 입력해주세요.\n> ");
-		String userName = scanner.nextLine();
+		String userName = reader.readLine();
 		System.out.print("일반, 이북, 오디오 중 빌릴 도서의 유형을 말씀해주세요.\n> ");
-		String bookType = scanner.nextLine();
+		String bookType = reader.readLine();
 		int index;
 		Book rentBook;
 		
@@ -116,8 +116,8 @@ public class BookRentalApplication {
 			case "일반":
 				viewPhysicalBooks();
 				System.out.print("빌릴 도서 번호를 말씀해주세요.\n> ");
-				index = scanner.nextInt();
-				if(index < 0 || index >= physicalBooks.size()) {
+				index = Integer.parseInt(reader.readLine());
+				if(index <= 0 || index >= physicalBooks.size()) {
 					System.out.println("잘못된 도서 번호입니다.");
 					return;
 				}
@@ -126,8 +126,8 @@ public class BookRentalApplication {
 			case "이북":
 				viewEBooks();
 				System.out.print("빌릴 도서 번호를 말씀해주세요.\n> ");
-				index = scanner.nextInt();
-				if(index < 0 || index >= eBooks.size()) {
+				index = Integer.parseInt(reader.readLine());
+				if(index <= 0 || index >= eBooks.size()) {
 					System.out.println("잘못된 도서 번호입니다.");
 					return;
 				}
@@ -136,8 +136,8 @@ public class BookRentalApplication {
 			case "오디오":
 				viewAudioBooks();
 				System.out.print("빌릴 도서 번호를 말씀해주세요.\n> ");
-				index = scanner.nextInt();
-				if(index < 0 || index >= audioBooks.size()) {
+				index = Integer.parseInt(reader.readLine());
+				if(index <= 0 || index >= audioBooks.size()) {
 					System.out.println("잘못된 도서 번호입니다.");
 					return;
 				}
@@ -158,14 +158,13 @@ public class BookRentalApplication {
 		rentBook.setRentedBy(userName);
 		rentBook.setRentalDate(LocalDateTime.now().plusWeeks(2).toString());
 		System.out.println("성공적으로 대여되었습니다. 2주 뒤까지 반납해주세요!");
-		scanner.nextLine();
 	}
 	
-	public void returnBook() {
+	public void returnBook() throws IOException {
 		System.out.print("유저 이름을 입력해주세요.\n> ");
-		String userName = scanner.nextLine();
+		String userName = reader.readLine();
 		System.out.print("일반, 이북, 오디오 중 반납할 도서의 유형을 말씀해주세요.\n> ");
-		String bookType = scanner.nextLine();
+		String bookType = reader.readLine();
 		int index;
 		Book rentBook;
 		
@@ -173,8 +172,8 @@ public class BookRentalApplication {
 			case "일반":
 				viewPhysicalBooks();
 				System.out.print("반납할 도서 번호를 말씀해주세요.\n> ");
-				index = scanner.nextInt();
-				if(index < 0 || index >= physicalBooks.size()) {
+				index = Integer.parseInt(reader.readLine());
+				if(index <= 0 || index >= physicalBooks.size()) {
 					System.out.println("잘못된 도서 번호입니다.");
 					return;
 				}
@@ -183,8 +182,8 @@ public class BookRentalApplication {
 			case "이북":
 				viewEBooks();
 				System.out.print("반납할 도서 번호를 말씀해주세요.\n> ");
-				index = scanner.nextInt();
-				if(index < 0 || index >= eBooks.size()) {
+				index = Integer.parseInt(reader.readLine());
+				if(index <= 0 || index >= eBooks.size()) {
 					System.out.println("잘못된 도서 번호입니다.");
 					return;
 				}
@@ -193,8 +192,8 @@ public class BookRentalApplication {
 			case "오디오":
 				viewAudioBooks();
 				System.out.print("반납할 도서 번호를 말씀해주세요.\n> ");
-				index = scanner.nextInt();
-				if(index < 0 || index >= audioBooks.size()) {
+				index = Integer.parseInt(reader.readLine());
+				if(index <= 0 || index >= audioBooks.size()) {
 					System.out.println("잘못된 도서 번호입니다.");
 					return;
 				}
@@ -211,7 +210,7 @@ public class BookRentalApplication {
 		}
 		else if(LocalDateTime.now().isAfter(LocalDateTime.parse(rentBook.getRentalDate(), dtf))) {
 			System.out.print("연체료 100원이 부과되었습니다. 연체료를 내주세요.\n> ");
-			while(scanner.nextInt() != 100) {
+			while(Integer.parseInt(reader.readLine()) != 100) {
 				System.out.print("연체료는 100원입니다. 다시 내주세요.\n> ");
 			}
 		}
@@ -219,6 +218,5 @@ public class BookRentalApplication {
 		rentBook.setRentedBy("");
 		rentBook.setRentalDate("");
 		System.out.println("성공적으로 반납되었습니다. 이용해주셔서 감사합니다!");
-		scanner.nextLine();
 	}
 }

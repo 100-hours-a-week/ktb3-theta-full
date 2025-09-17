@@ -4,7 +4,7 @@ import java.io.*;
 public class Main {
 	public static void main(String[] args) throws IOException {
 		BookRentalApplication application = new BookRentalApplication();
-		Scanner scanner = new Scanner(System.in);
+		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 		
 		System.out.println("=========================");
 		System.out.println("책 대여 시스템");
@@ -13,7 +13,7 @@ public class Main {
 		int input;
 		do {
 			application.displayMenu();
-			input = scanner.nextInt();
+			input = Integer.parseInt(reader.readLine());
 			
 			switch(input) {
 				case 1:
@@ -35,6 +35,6 @@ public class Main {
 		
 		application.writeData();
 		System.out.println("이용해주셔서 감사합니다.");
-		scanner.close();
+		reader.close();
 	}
 }

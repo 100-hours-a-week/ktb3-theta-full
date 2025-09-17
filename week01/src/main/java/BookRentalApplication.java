@@ -9,9 +9,9 @@ public class BookRentalApplication {
 	private final static File[] files = {new File(DATA_PATH+"physicalBooks.csv"), new File(DATA_PATH+"eBooks.csv"), new File(DATA_PATH+"audioBooks.csv")};
 	private final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSS");
 	
-	private static List<PhysicalBook> physicalBooks = new ArrayList<>();
-	private static List<EBook> eBooks = new ArrayList<>();
-	private static List<AudioBook> audioBooks = new ArrayList<>();
+	private static final List<PhysicalBook> physicalBooks = new ArrayList<>();
+	private static final List<EBook> eBooks = new ArrayList<>();
+	private static final List<AudioBook> audioBooks = new ArrayList<>();
 	
 	public void readData() throws IOException {
 		for (int i = 0; i < files.length; i++) {

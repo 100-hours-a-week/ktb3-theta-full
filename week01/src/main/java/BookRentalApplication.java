@@ -104,10 +104,13 @@ public class BookRentalApplication {
 		}
 	}
 	
-	public void rentBook() throws IOException {
+	public String getUsername() throws IOException {
 		System.out.print("유저 이름을 입력해주세요.\n> ");
-		String userName = reader.readLine();
-		System.out.print("일반, 이북, 오디오 중 빌릴 도서의 유형을 말씀해주세요.\n> ");
+		return reader.readLine();
+	}
+	
+	public Book selectBook() throws IOException {
+		System.out.print("일반, 이북, 오디오 중 도서의 유형을 말씀해주세요.\n> ");
 		String bookType = reader.readLine();
 		int index;
 		Book rentBook;
@@ -119,7 +122,7 @@ public class BookRentalApplication {
 				index = Integer.parseInt(reader.readLine());
 				if(index <= 0 || index >= physicalBooks.size()) {
 					System.out.println("잘못된 도서 번호입니다.");
-					return;
+					return null;
 				}
 				rentBook = physicalBooks.get(index - 1);
 				break;
@@ -129,7 +132,7 @@ public class BookRentalApplication {
 				index = Integer.parseInt(reader.readLine());
 				if(index <= 0 || index >= eBooks.size()) {
 					System.out.println("잘못된 도서 번호입니다.");
-					return;
+					return null;
 				}
 				rentBook = eBooks.get(index - 1);
 				break;
@@ -139,14 +142,21 @@ public class BookRentalApplication {
 				index = Integer.parseInt(reader.readLine());
 				if(index <= 0 || index >= audioBooks.size()) {
 					System.out.println("잘못된 도서 번호입니다.");
-					return;
+					return null;
 				}
 				rentBook = audioBooks.get(index - 1);
 				break;
 			default:
 				System.out.println("잘못된 도서 유형입니다.");
-				return;
+				return null;
 		}
+		
+		return rentBook;
+	}
+	
+	public void rentBook() throws IOException {
+		String userName = getUsername();
+		Book rentBook = selectBook();
 		
 		if(rentBook.getRentedBy().equals(userName)) {
 			System.out.println("사용자가 이미 대여 중인 도서입니다.");
@@ -161,48 +171,8 @@ public class BookRentalApplication {
 	}
 	
 	public void returnBook() throws IOException {
-		System.out.print("유저 이름을 입력해주세요.\n> ");
-		String userName = reader.readLine();
-		System.out.print("일반, 이북, 오디오 중 반납할 도서의 유형을 말씀해주세요.\n> ");
-		String bookType = reader.readLine();
-		int index;
-		Book rentBook;
-		
-		switch (bookType) {
-			case "일반":
-				viewPhysicalBooks();
-				System.out.print("반납할 도서 번호를 말씀해주세요.\n> ");
-				index = Integer.parseInt(reader.readLine());
-				if(index <= 0 || index >= physicalBooks.size()) {
-					System.out.println("잘못된 도서 번호입니다.");
-					return;
-				}
-				rentBook = physicalBooks.get(index - 1);
-				break;
-			case "이북":
-				viewEBooks();
-				System.out.print("반납할 도서 번호를 말씀해주세요.\n> ");
-				index = Integer.parseInt(reader.readLine());
-				if(index <= 0 || index >= eBooks.size()) {
-					System.out.println("잘못된 도서 번호입니다.");
-					return;
-				}
-				rentBook = eBooks.get(index - 1);
-				break;
-			case "오디오":
-				viewAudioBooks();
-				System.out.print("반납할 도서 번호를 말씀해주세요.\n> ");
-				index = Integer.parseInt(reader.readLine());
-				if(index <= 0 || index >= audioBooks.size()) {
-					System.out.println("잘못된 도서 번호입니다.");
-					return;
-				}
-				rentBook = audioBooks.get(index - 1);
-				break;
-			default:
-				System.out.println("잘못된 도서 유형입니다.");
-				return;
-		}
+		String userName = getUsername();
+		Book rentBook = selectBook();
 
 		if(rentBook.getRentedBy().isEmpty() || !rentBook.getRentedBy().equals(userName)) {
 			System.out.println("대여 중인 도서가 아닙니다.");

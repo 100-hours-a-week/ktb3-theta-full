@@ -5,62 +5,67 @@ import java.util.*;
 
 public class BookRentalApplication {
 	BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+	
 	private static final String DATA_PATH = "week01/src/main/java/data/";
-	private final static File[] files = {new File(DATA_PATH+"physicalBooks.csv"), new File(DATA_PATH+"eBooks.csv"), new File(DATA_PATH+"audioBooks.csv")};
+	private static final int LATE_FEE = 100;
+	
+	private final static File[] files = {new File(DATA_PATH + "physicalBooks.csv"), new File(DATA_PATH + "eBooks.csv"), new File(DATA_PATH + "audioBooks.csv")};
 	private final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSS");
 	
 	private static final List<PhysicalBook> physicalBooks = new ArrayList<>();
 	private static final List<EBook> eBooks = new ArrayList<>();
 	private static final List<AudioBook> audioBooks = new ArrayList<>();
 	
-	public void readData() throws IOException {
+	public void readData() {
 		for (int i = 0; i < files.length; i++) {
-			BufferedReader reader = new BufferedReader(new FileReader(files[i]));
-			String data;
-			while ((data = reader.readLine()) != null) {
-				String[] details = data.split(",", -1);
-				switch (i) {
-					case 0:
-						physicalBooks.add(new PhysicalBook(details[0], details[1], details[2], details[3]));
-						break;
-					case 1:
-						eBooks.add(new EBook(details[0], details[1], details[2], details[3], details[4]));
-						break;
-					case 2:
-						audioBooks.add(new AudioBook(details[0], details[1], details[2], details[3], details[4], Integer.parseInt(details[5]), details[6]));
-						break;
+			try (BufferedReader fileReader = new BufferedReader(new FileReader(files[i]))) {
+				String data;
+				while ((data = fileReader.readLine()) != null) {
+					String[] details = data.split(",", -1);
+					switch (i) {
+						case 0:
+							physicalBooks.add(new PhysicalBook(details[0], details[1], details[2], details[3]));
+							break;
+						case 1:
+							eBooks.add(new EBook(details[0], details[1], details[2], details[3], details[4]));
+							break;
+						case 2:
+							audioBooks.add(new AudioBook(details[0], details[1], details[2], details[3], details[4], Integer.parseInt(details[5]), details[6]));
+							break;
+					}
 				}
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
-			reader.close();
 		}
 	}
 	
-	public void writeData() throws IOException {
+	public void writeData() {
 		for (int i = 0; i < files.length; i++) {
-			BufferedWriter writer = new BufferedWriter(new FileWriter(files[i]));
-			
-			switch (i) {
-				case 0:
-					for (PhysicalBook physicalBook : physicalBooks) {
-						writer.write(physicalBook.toCSV());
-						writer.newLine();
-					}
-					break;
-				case 1:
-					for (EBook eBook : eBooks) {
-						writer.write(eBook.toCSV());
-						writer.newLine();
-					}
-					break;
-				case 2:
-					for (AudioBook audioBook : audioBooks) {
-						writer.write(audioBook.toCSV());
-						writer.newLine();
-					}
-					break;
+			try (BufferedWriter writer = new BufferedWriter(new FileWriter(files[i]))) {
+				switch (i) {
+					case 0:
+						for (PhysicalBook physicalBook : physicalBooks) {
+							writer.write(physicalBook.toCSV());
+							writer.newLine();
+						}
+						break;
+					case 1:
+						for (EBook eBook : eBooks) {
+							writer.write(eBook.toCSV());
+							writer.newLine();
+						}
+						break;
+					case 2:
+						for (AudioBook audioBook : audioBooks) {
+							writer.write(audioBook.toCSV());
+							writer.newLine();
+						}
+						break;
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
-			writer.flush();
-			writer.close();
 		}
 	}
 	
@@ -74,6 +79,7 @@ public class BookRentalApplication {
 		System.out.println("입력을 통해 선택해주세요.");
 		System.out.print("> ");
 	}
+	
 	public void viewBooks() {
 		viewPhysicalBooks();
 		viewEBooks();
@@ -83,16 +89,16 @@ public class BookRentalApplication {
 	private void viewPhysicalBooks() {
 		System.out.println("[일반 도서 목록]");
 		for (int i = 0; i < physicalBooks.size(); i++) {
-			PhysicalBook physicalBook =  physicalBooks.get(i);
-			System.out.println((i+1) + ". " + physicalBook.getTitle() + "	|	" + (physicalBook.getRentedBy().isEmpty() ? "대여 가능" : "대여 불가능, 대여자의 반납일은 " + physicalBook.getRentalDate().substring(0, 10)));
+			PhysicalBook physicalBook = physicalBooks.get(i);
+			System.out.println((i + 1) + ". " + physicalBook.getTitle() + "	|	" + (physicalBook.getRentedBy().isEmpty() ? "대여 가능" : "대여 불가능, 대여자의 반납일은 " + physicalBook.getRentalDate().substring(0, 10)));
 		}
 	}
 	
 	private void viewEBooks() {
 		System.out.println("[이북 목록]");
 		for (int i = 0; i < eBooks.size(); i++) {
-			EBook eBook =  eBooks.get(i);
-			System.out.println((i+1) + ". " + eBook.getTitle() + "." + eBook.getFileFormat() + "	|	" + (eBook.getRentedBy().isEmpty() ? "대여 가능" : "대여 불가능, 대여자의 반납일은 " + eBook.getRentalDate().substring(0, 10)));
+			EBook eBook = eBooks.get(i);
+			System.out.println((i + 1) + ". " + eBook.getTitle() + "." + eBook.getFileFormat() + "	|	" + (eBook.getRentedBy().isEmpty() ? "대여 가능" : "대여 불가능, 대여자의 반납일은 " + eBook.getRentalDate().substring(0, 10)));
 		}
 	}
 	
@@ -100,7 +106,7 @@ public class BookRentalApplication {
 		System.out.println("[오디오북 목록]");
 		for (int i = 0; i < audioBooks.size(); i++) {
 			AudioBook audioBook = audioBooks.get(i);
-			System.out.println((i+1) + ". " + audioBook.getTitle() + "." + audioBook.getFileFormat() + "	|	" + (audioBook.getRentedBy().isEmpty() ? "대여 가능" : "대여 불가능, 대여자의 반납일은 " + audioBook.getRentalDate().substring(0, 10)));
+			System.out.println((i + 1) + ". " + audioBook.getTitle() + "." + audioBook.getFileFormat() + "	|	" + (audioBook.getRentedBy().isEmpty() ? "대여 가능" : "대여 불가능, 대여자의 반납일은 " + audioBook.getRentalDate().substring(0, 10)));
 		}
 	}
 	
@@ -120,7 +126,7 @@ public class BookRentalApplication {
 				viewPhysicalBooks();
 				System.out.print("빌릴 도서 번호를 말씀해주세요.\n> ");
 				index = Integer.parseInt(reader.readLine());
-				if(index <= 0 || index >= physicalBooks.size()) {
+				if (index <= 0 || index >= physicalBooks.size()) {
 					System.out.println("잘못된 도서 번호입니다.");
 					return null;
 				}
@@ -130,7 +136,7 @@ public class BookRentalApplication {
 				viewEBooks();
 				System.out.print("빌릴 도서 번호를 말씀해주세요.\n> ");
 				index = Integer.parseInt(reader.readLine());
-				if(index <= 0 || index >= eBooks.size()) {
+				if (index <= 0 || index >= eBooks.size()) {
 					System.out.println("잘못된 도서 번호입니다.");
 					return null;
 				}
@@ -140,7 +146,7 @@ public class BookRentalApplication {
 				viewAudioBooks();
 				System.out.print("빌릴 도서 번호를 말씀해주세요.\n> ");
 				index = Integer.parseInt(reader.readLine());
-				if(index <= 0 || index >= audioBooks.size()) {
+				if (index <= 0 || index >= audioBooks.size()) {
 					System.out.println("잘못된 도서 번호입니다.");
 					return null;
 				}
@@ -158,10 +164,10 @@ public class BookRentalApplication {
 		String userName = getUsername();
 		Book rentBook = selectBook();
 		
-		if(rentBook.getRentedBy().equals(userName)) {
+		if (rentBook.getRentedBy().equals(userName)) {
 			System.out.println("사용자가 이미 대여 중인 도서입니다.");
 			return;
-		} else if(!rentBook.getRentedBy().isEmpty()) {
+		} else if (!rentBook.getRentedBy().isEmpty()) {
 			System.out.println("이미 다른 사용자가 대여 중인 도서입니다. 대여 만료일은 " + rentBook.getRentalDate() + "이니 기다려주세요.");
 			return;
 		}
@@ -173,15 +179,14 @@ public class BookRentalApplication {
 	public void returnBook() throws IOException {
 		String userName = getUsername();
 		Book rentBook = selectBook();
-
-		if(rentBook.getRentedBy().isEmpty() || !rentBook.getRentedBy().equals(userName)) {
+		
+		if (rentBook.getRentedBy().isEmpty() || !rentBook.getRentedBy().equals(userName)) {
 			System.out.println("대여 중인 도서가 아닙니다.");
 			return;
-		}
-		else if(LocalDateTime.now().isAfter(LocalDateTime.parse(rentBook.getRentalDate(), dtf))) {
-			System.out.print("연체료 100원이 부과되었습니다. 연체료를 내주세요.\n> ");
-			while(Integer.parseInt(reader.readLine()) != 100) {
-				System.out.print("연체료는 100원입니다. 다시 내주세요.\n> ");
+		} else if (LocalDateTime.now().isAfter(LocalDateTime.parse(rentBook.getRentalDate(), dtf))) {
+			System.out.print("연체료 " + LATE_FEE + "원이 부과되었습니다. 연체료를 내주세요.\n> ");
+			while (Integer.parseInt(reader.readLine()) != LATE_FEE) {
+				System.out.print("연체료는 " + LATE_FEE + "원입니다. 다시 내주세요.\n> ");
 			}
 		}
 		

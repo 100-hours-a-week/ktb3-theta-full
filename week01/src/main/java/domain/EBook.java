@@ -1,3 +1,5 @@
+package domain;
+
 public class EBook extends DigitalBook {
 
 	public EBook(String title, String author,  String rentalDate, String rentedBy, String fileFormat) {

@@ -1,3 +1,5 @@
+package domain;
+
 public class Book {
 	private final String title;
 	private final String author;
@@ -9,10 +11,6 @@ public class Book {
 		this.author = author;
 		this.rentalDate = rentalDate;
 		this.rentedBy = rentedBy;
-	}
-	
-	public String getTitle() {
-		return this.title;
 	}
 	
 	public String getRentalDate() {
@@ -29,6 +27,10 @@ public class Book {
 	
 	public void setRentedBy(String rentedBy) {
 		this.rentedBy = rentedBy;
+	}
+	
+	public String toString() {
+		return this.title;
 	}
 	
 	public String toCSV() {

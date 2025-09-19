@@ -1,3 +1,5 @@
+package domain;
+
 public class AudioBook extends DigitalBook {
 	private final int duration;
 	private final String narrator;
@@ -8,10 +10,6 @@ public class AudioBook extends DigitalBook {
 		this.narrator = narrator;
 	}
 
-	public String getNarrator() {
-		return this.narrator;
-	}
-	
 	@Override
 	public String toCSV() {
 		return super.toCSV() + "," + this.duration + "," + this.narrator;

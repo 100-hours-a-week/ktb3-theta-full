@@ -1,3 +1,5 @@
+package domain;
+
 public class DigitalBook extends Book {
 	private final String fileFormat;
 
@@ -6,8 +8,9 @@ public class DigitalBook extends Book {
 		this.fileFormat = fileFormat;
 	}
 	
-	public String getFileFormat() {
-		return this.fileFormat;
+	@Override
+	public String toString() {
+		return super.toString() + "." + this.fileFormat;
 	}
 	
 	@Override

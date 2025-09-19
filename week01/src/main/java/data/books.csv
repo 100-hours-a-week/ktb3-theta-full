@@ -1,0 +1,15 @@
+type,title,author,rentalDate,rentedBy,fileFormat,duration,narrator
+physical,소년이 온다,한강,,,,,
+physical,Java 응용,카테부,,,,,
+physical,토익 기출 문제집,영어 교사,,,,,
+physical,싯다르타,헤르만 헤세,,,,,
+physical,더 머니북,토스,,,,,
+physical,컴퓨터언어,카테부,,,,,
+e,도둑맞은 집중력,요한 하리,,,pdf,,
+e,코스모스,칼 세이건,,,txt,,
+e,웹 기초,카테부,,,pdf,,
+e,데이터베이스 기초,카테부,,,pdf,,
+audio,자본주의,EBS,,,mp3,180,EBS
+audio,인간실격,다자이 오사무,,,wav,150,나레이터 A
+audio,새의 선물,은희경,,,mp3,90,나레이터 B
+audio,Git,카테부,,,mp3,240,나레이터 C

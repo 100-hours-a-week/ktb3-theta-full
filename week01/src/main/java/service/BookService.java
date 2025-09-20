@@ -1,7 +1,7 @@
 package service;
 
 import domain.Book;
-import dto.Validator;
+import dto.ResponseDto;
 import repository.BookRepository;
 import util.DateUtil;
 
@@ -32,44 +32,44 @@ public class BookService {
 		return sb.toString();
 	}
 	
-	public Validator rentBook(String userName, int index) {
+	public ResponseDto rentBook(String userName, int index) {
 		if(isValid(index)) {
-			return new Validator(false, "잘못된 도서 번호입니다.");
+			return new ResponseDto(false, "잘못된 도서 번호입니다.");
 		}
 		
 		Book book = bookRepository.getBook(index);
 		if (book.getRentedBy().equals(userName)) {
-			return new Validator(false, "사용자가 이미 대여 중인 도서입니다.");
+			return new ResponseDto(false, "사용자가 이미 대여 중인 도서입니다.");
 		} else if (!book.getRentedBy().isEmpty()) {
-			return new Validator(false, "이미 다른 사용자가 대여 중인 도서입니다. 대여 만료일은 " + book.getRentalDate() + "이니 기다려주세요.");
+			return new ResponseDto(false, "이미 다른 사용자가 대여 중인 도서입니다. 대여 만료일은 " + book.getRentalDate() + "이니 기다려주세요.");
 		}
 		
 		bookRepository.changeBookStatus(book, userName, dateUtil.getReturnDueDate());
-		return new Validator(true, "성공적으로 대여되었습니다. 2주 뒤까지 반납해주세요!");
+		return new ResponseDto(true, "성공적으로 대여되었습니다. 2주 뒤까지 반납해주세요!");
 	}
 	
-	public Validator returnBook(String userName, int index) {
+	public ResponseDto returnBook(String userName, int index) {
 		if(isValid(index)) {
-			return new Validator(false, "잘못된 도서 번호입니다.");
+			return new ResponseDto(false, "잘못된 도서 번호입니다.");
 		}
 		
 		Book book = bookRepository.getBook(index);
 		if (book.getRentedBy().isEmpty() || !book.getRentedBy().equals(userName)) {
-			return new Validator(false, "대여 중인 도서가 아닙니다.");
+			return new ResponseDto(false, "대여 중인 도서가 아닙니다.");
 		} if(isLate(book)) {
-			return new Validator(false, "연체되었습니다.");
+			return new ResponseDto(false, "연체되었습니다.");
 		}
 		return processReturn(book);
 	}
 	
-	public Validator processReturn(int index) {
+	public ResponseDto processReturn(int index) {
 		bookRepository.changeBookStatus(bookRepository.getBook(index), "", "");
-		return new Validator(true, "성공적으로 반납되었습니다. 이용해주셔서 감사합니다!");
+		return new ResponseDto(true, "성공적으로 반납되었습니다. 이용해주셔서 감사합니다!");
 	}
 	
-	public Validator processReturn(Book book) {
+	public ResponseDto processReturn(Book book) {
 		bookRepository.changeBookStatus(book, "", "");
-		return new Validator(true, "성공적으로 반납되었습니다. 이용해주셔서 감사합니다!");
+		return new ResponseDto(true, "성공적으로 반납되었습니다. 이용해주셔서 감사합니다!");
 	}
 	
 	private boolean isLate(Book book) {

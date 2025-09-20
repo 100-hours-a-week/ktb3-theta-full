@@ -1,6 +1,6 @@
 package controller;
 
-import dto.Validator;
+import dto.ResponseDto;
 import service.BookService;
 import view.View;
 
@@ -19,25 +19,25 @@ public class BookController {
 		return bookService.viewBooks();
 	}
 	
-	public Validator rentBook(String userName, int index) {
+	public ResponseDto rentBook(String userName, int index) {
 		return bookService.rentBook(userName, index-1);
 	}
 	
-	public Validator returnBook(String userName, int index) {
-		Validator validator = bookService.returnBook(userName, index);
+	public ResponseDto returnBook(String userName, int index) {
+		ResponseDto responseDto = bookService.returnBook(userName, index);
 		
-		while(!validator.isValid() && validator.getMessage().contains("연체")) {
-			validator = payLateFee(Integer.parseInt(
-					view.getInput(validator.getMessage() + "연체료는 " + LATE_FEE + "원 입니다.")
+		while(!responseDto.isValid() && responseDto.message().contains("연체")) {
+			responseDto = payLateFee(Integer.parseInt(
+					view.getInput(responseDto.message() + "연체료는 " + LATE_FEE + "원 입니다.")
 			));
 		}
 		return bookService.processReturn(index);
 	}
 	
-	public Validator payLateFee(int fee) {
+	public ResponseDto payLateFee(int fee) {
 		if(fee != LATE_FEE) {
-			return new Validator(false, "연체료는 " + LATE_FEE + "원 입니다.");
+			return new ResponseDto(false, "연체료는 " + LATE_FEE + "원 입니다.");
 		}
-		return new Validator(true, "연체료가 납부됐습니다.");
+		return new ResponseDto(true, "연체료가 납부됐습니다.");
 	}
 }

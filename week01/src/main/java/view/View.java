@@ -1,7 +1,7 @@
 package view;
 
 import controller.BookController;
-import dto.Validator;
+import dto.ResponseDto;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -96,15 +96,15 @@ public class View {
 	public void rentBook() {
 		showMessage(bookController.viewBooks());
 		
-		Validator vali = bookController.rentBook(getUsername(), Integer.parseInt(getInput("빌릴 도서의 번호를 선택해주세요.")));
-		showMessage(vali.getMessage());
+		ResponseDto vali = bookController.rentBook(getUsername(), Integer.parseInt(getInput("빌릴 도서의 번호를 선택해주세요.")));
+		showMessage(vali.message());
 	}
 	
 	public void returnBook() {
 		showMessage(bookController.viewBooks());
 		
-		Validator vali = bookController.returnBook(getUsername(), Integer.parseInt(getInput("반납할 도서의 번호를 선택해주세요.")));
-		showMessage(vali.getMessage());
+		ResponseDto vali = bookController.returnBook(getUsername(), Integer.parseInt(getInput("반납할 도서의 번호를 선택해주세요.")));
+		showMessage(vali.message());
 	}
 	
 }

@@ -39,24 +39,24 @@ public class BookService {
 	
 	public ResponseDto rentBook(String userName, int index) {
 		if(isValid(index)) {
-			return new ResponseDto(false, "잘못된 도서 번호입니다.");
+			return new ResponseDto(false, "잘못된 도서 번호입니다.\n");
 		}
 		
 		Book book = bookRepository.getBook(index);
 		if (book.getRentedBy().equals(userName)) {
-			return new ResponseDto(false, "사용자가 이미 대여 중인 도서입니다.");
+			return new ResponseDto(false, "사용자가 이미 대여 중인 도서입니다.\n");
 		} else if (!book.getRentedBy().isEmpty()) {
-			return new ResponseDto(false, "이미 다른 사용자가 대여 중인 도서입니다. 대여 만료일은 " + book.getRentalDate() + "이니 기다려주세요.");
+			return new ResponseDto(false, "이미 다른 사용자가 대여 중인 도서입니다. 대여 만료일은 " + book.getRentalDate() + "이니 기다려주세요.\n");
 		}
 		
 		bookRepository.changeBookStatus(book, userName, dateUtil.getReturnDueDate());
 		executorService.execute(fileService::writeData);
-		return new ResponseDto(true, "성공적으로 대여되었습니다. 2주 뒤까지 반납해주세요!");
+		return new ResponseDto(true, "성공적으로 대여되었습니다. 2주 뒤까지 반납해주세요!\n");
 	}
 	
 	public ResponseDto returnBook(String userName, int index) {
 		if(isValid(index)) {
-			return new ResponseDto(false, "잘못된 도서 번호입니다.");
+			return new ResponseDto(false, "잘못된 도서 번호입니다.\n");
 		}
 		
 		Book book = bookRepository.getBook(index);
@@ -77,7 +77,7 @@ public class BookService {
 	public ResponseDto processReturn(Book book) {
 		bookRepository.changeBookStatus(book, "", "");
 		executorService.execute(fileService::writeData);
-		return new ResponseDto(true, "성공적으로 반납되었습니다. 이용해주셔서 감사합니다!");
+		return new ResponseDto(true, "성공적으로 반납되었습니다. 이용해주셔서 감사합니다!\n");
 	}
 	
 	private boolean isLate(Book book) {

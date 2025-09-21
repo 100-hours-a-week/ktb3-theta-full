@@ -55,8 +55,8 @@ public class FileService {
 				}
 				writer.write(book.toCSV());
 				writer.newLine();
-				System.out.println("서버에 데이터 저장이 완료되었습니다.");
 			}
+			System.out.println("서버에 데이터 저장이 완료되었습니다.");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

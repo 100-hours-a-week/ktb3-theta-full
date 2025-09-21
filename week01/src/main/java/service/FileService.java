@@ -4,7 +4,6 @@ import domain.*;
 import repository.BookRepository;
 
 import java.io.*;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class FileService {
@@ -12,8 +11,6 @@ public class FileService {
 	private static final String PHYSICAL = "physical";
 	private static final String E = "e";
 	private static final String AUDIO = "audio";
-	
-	private final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSS");
 	
 	private final BookRepository bookRepository;
 	
@@ -23,7 +20,7 @@ public class FileService {
 	
 	public void readData() {
 		try (BufferedReader fileReader = new BufferedReader(new FileReader(file))) {
-			String data = fileReader.readLine();
+			String data;
 			
 			while ((data = fileReader.readLine()) != null) {
 				String[] details = data.split(",", -1);
@@ -32,7 +29,7 @@ public class FileService {
 						bookRepository.addBooks(new PhysicalBook(details[1], details[2], details[3], details[4]));
 						break;
 					case E:
-						bookRepository.addBooks(new DigitalBook(details[1], details[2], details[3], details[4], details[5]));
+						bookRepository.addBooks(new EBook(details[1], details[2], details[3], details[4], details[5]));
 						break;
 					case AUDIO:
 						bookRepository.addBooks(new AudioBook(details[1], details[2], details[3], details[4], details[5], Integer.parseInt(details[6]), details[7]));
@@ -49,8 +46,16 @@ public class FileService {
 			List<Book> books = bookRepository.getBooks();
 			
 			for(Book book : books) {
+				if(book instanceof PhysicalBook) {
+					writer.write(PHYSICAL+",");
+				} else if(book instanceof EBook) {
+					writer.write(E+",");
+				} else if (book instanceof AudioBook) {
+					writer.write(AUDIO+",");
+				}
 				writer.write(book.toCSV());
 				writer.newLine();
+				System.out.println("서버에 데이터 저장이 완료되었습니다.");
 			}
 		} catch (IOException e) {
 			e.printStackTrace();

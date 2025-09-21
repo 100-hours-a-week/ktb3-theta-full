@@ -7,15 +7,20 @@ import util.DateUtil;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class BookService {
 	
 	private final DateUtil dateUtil;
 	private final BookRepository bookRepository;
+	private final FileService fileService;
+	private final ExecutorService executorService = Executors.newSingleThreadExecutor();
 	
-	public BookService(DateUtil dateUtil, BookRepository bookRepository) {
+	public BookService(DateUtil dateUtil, BookRepository bookRepository, FileService fileService) {
 		this.dateUtil = dateUtil;
 		this.bookRepository = bookRepository;
+		this.fileService = fileService;
 	}
 	
 	public boolean isValid(int index) {
@@ -45,6 +50,7 @@ public class BookService {
 		}
 		
 		bookRepository.changeBookStatus(book, userName, dateUtil.getReturnDueDate());
+		executorService.execute(fileService::writeData);
 		return new ResponseDto(true, "성공적으로 대여되었습니다. 2주 뒤까지 반납해주세요!");
 	}
 	
@@ -63,17 +69,23 @@ public class BookService {
 	}
 	
 	public ResponseDto processReturn(int index) {
-		bookRepository.changeBookStatus(bookRepository.getBook(index), "", "");
+		bookRepository.changeBookStatus(bookRepository.getBook(index-1), "", "");
+		executorService.execute(fileService::writeData);
 		return new ResponseDto(true, "성공적으로 반납되었습니다. 이용해주셔서 감사합니다!");
 	}
 	
 	public ResponseDto processReturn(Book book) {
 		bookRepository.changeBookStatus(book, "", "");
+		executorService.execute(fileService::writeData);
 		return new ResponseDto(true, "성공적으로 반납되었습니다. 이용해주셔서 감사합니다!");
 	}
 	
 	private boolean isLate(Book book) {
 		return LocalDateTime.now().isAfter(
 				dateUtil.parseStringToDate(book.getRentalDate()));
+	}
+	
+	public void closeThread() {
+		executorService.shutdown();
 	}
 }

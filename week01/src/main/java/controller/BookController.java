@@ -24,12 +24,12 @@ public class BookController {
 	}
 	
 	public ResponseDto returnBook(String userName, int index) {
-		ResponseDto responseDto = bookService.returnBook(userName, index);
+		ResponseDto responseDto = bookService.returnBook(userName, index-1);
 		
 		while(!responseDto.isValid() && responseDto.message().contains("연체")) {
-			responseDto = payLateFee(Integer.parseInt(
+			responseDto = payLateFee(
 					view.getInput(responseDto.message() + "연체료는 " + LATE_FEE + "원 입니다.")
-			));
+			);
 		}
 		return bookService.processReturn(index);
 	}

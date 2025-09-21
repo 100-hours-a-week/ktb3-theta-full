@@ -10,14 +10,18 @@ import java.io.*;
 
 public class Main {
 	public static void main(String[] args) {
+		DateUtil dateUtil = new DateUtil();
 		BookRepository bookRepository = new BookRepository();
-		BookService bookService = new BookService(new DateUtil(), bookRepository);
+		
+		FileService fileService = new FileService(bookRepository);
+		BookService bookService = new BookService(dateUtil, bookRepository, fileService);
+		
 		View view = new View();
 		BookController bookController = new BookController(view, bookService);
-		FileService fileService = new FileService(bookRepository);
 		view.setController(bookController);
 		
 		fileService.readData();
 		view.runApplication();
+		bookService.closeThread();
 	}
 }

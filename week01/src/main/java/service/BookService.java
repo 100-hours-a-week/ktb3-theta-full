@@ -61,9 +61,9 @@ public class BookService {
 		
 		Book book = bookRepository.getBook(index);
 		if (book.getRentedBy().isEmpty() || !book.getRentedBy().equals(userName)) {
-			return new ResponseDto(false, "대여 중인 도서가 아닙니다.");
+			return new ResponseDto(false, "대여 중인 도서가 아닙니다.\n");
 		} if(isLate(book)) {
-			return new ResponseDto(false, "연체되었습니다.");
+			return new ResponseDto(false, "연체되었습니다.\n");
 		}
 		return processReturn(book);
 	}
@@ -71,7 +71,7 @@ public class BookService {
 	public ResponseDto processReturn(int index) {
 		bookRepository.changeBookStatus(bookRepository.getBook(index-1), "", "");
 		executorService.execute(fileService::writeData);
-		return new ResponseDto(true, "성공적으로 반납되었습니다. 이용해주셔서 감사합니다!");
+		return new ResponseDto(true, "성공적으로 반납되었습니다. 이용해주셔서 감사합니다!\n");
 	}
 	
 	public ResponseDto processReturn(Book book) {

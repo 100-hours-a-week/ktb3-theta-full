@@ -36,8 +36,8 @@ public class BookController {
 	
 	public ResponseDto payLateFee(int fee) {
 		if(fee != LATE_FEE) {
-			return new ResponseDto(false, "연체료는 " + LATE_FEE + "원 입니다.");
+			return new ResponseDto(false, "연체료는 " + LATE_FEE + "원 입니다.\n");
 		}
-		return new ResponseDto(true, "연체료가 납부됐습니다.");
+		return new ResponseDto(true, "연체료가 납부됐습니다.\n");
 	}
 }

@@ -24,10 +24,12 @@ public class BookService {
 		this.fileService = fileService;
 	}
 	
+	// 도서 번호 유효성 확인
 	public boolean isValid(int index) {
 		return index < 0 || index > bookRepository.getBooksSize();
 	}
 	
+	// 도서 목록 조회
 	public String viewBooks() {
 		StringBuilder sb = new StringBuilder();
 		
@@ -38,11 +40,8 @@ public class BookService {
 		return sb.toString();
 	}
 	
+	// 도서 대여
 	public ResponseDto rentBook(String userName, int index) {
-		if(isValid(index)) {
-			return new ResponseDto(false, "잘못된 도서 번호입니다.\n");
-		}
-		
 		Book book = bookRepository.getBook(index);
 		if (book.getRentedBy().equals(userName)) {
 			return new ResponseDto(false, "사용자가 이미 대여 중인 도서입니다.\n");
@@ -55,11 +54,8 @@ public class BookService {
 		return new ResponseDto(true, "성공적으로 대여되었습니다. 2주 뒤까지 반납해주세요!\n");
 	}
 	
+	// 도서 반납 (연체 여부 확인)
 	public ResponseDto returnBook(String userName, int index) {
-		if(isValid(index)) {
-			return new ResponseDto(false, "잘못된 도서 번호입니다.\n");
-		}
-		
 		Book book = bookRepository.getBook(index);
 		if (book.getRentedBy().isEmpty() || !book.getRentedBy().equals(userName)) {
 			return new ResponseDto(false, "대여 중인 도서가 아닙니다.\n");
@@ -69,6 +65,7 @@ public class BookService {
 		return processReturn(book);
 	}
 	
+	// 연체료 납부
 	public ResponseDto payLateFee(int fee) {
 		if(fee != LATE_FEE) {
 			return new ResponseDto(false, "연체료는 " + LATE_FEE + "원 입니다.\n");
@@ -76,6 +73,7 @@ public class BookService {
 		return new ResponseDto(true, "연체료가 납부됐습니다.\n");
 	}
 	
+	// 반납 진행
 	public ResponseDto processReturn(int index) {
 		bookRepository.changeBookStatus(bookRepository.getBook(index-1), "", "");
 		executorService.execute(fileService::writeData);

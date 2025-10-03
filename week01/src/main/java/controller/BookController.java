@@ -15,10 +15,18 @@ public class BookController {
 	}
 	
 	public ResponseDto rentBook(String userName, int index) {
+		if(bookService.isValid(index)) {
+			return new ResponseDto(false, "잘못된 도서 번호입니다.\n");
+		}
+		
 		return bookService.rentBook(userName, index-1);
 	}
 	
 	public ResponseDto returnBook(String userName, int index) {
+		if(bookService.isValid(index)) {
+			return new ResponseDto(false, "잘못된 도서 번호입니다.\n");
+		}
+		
 		ResponseDto responseDto = bookService.returnBook(userName, index-1);
 		
 		if(!responseDto.isValid() && responseDto.message().contains("연체")) {

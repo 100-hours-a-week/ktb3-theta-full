@@ -8,9 +8,9 @@ import java.io.IOException;
 
 public class View {
 	private final BufferedReader reader = new BufferedReader(new java.io.InputStreamReader(System.in));
-	private BookController bookController;
+	private final BookController bookController;
 	
-	public void setController(BookController bookController) {
+	public View(BookController bookController) {
 		this.bookController = bookController;
 	}
 	
@@ -100,15 +100,18 @@ public class View {
 	public void rentBook() {
 		showMessage(bookController.viewBooks());
 		
-		ResponseDto vali = bookController.rentBook(getUsername(), getInput("빌릴 도서의 번호를 선택해주세요."));
-		showMessage(vali.message());
+		ResponseDto responseDto = bookController.rentBook(getUsername(), getInput("빌릴 도서의 번호를 선택해주세요."));
+		showMessage(responseDto.message());
 	}
 	
 	public void returnBook() {
 		showMessage(bookController.viewBooks());
 		
-		ResponseDto vali = bookController.returnBook(getUsername(), getInput("반납할 도서의 번호를 선택해주세요."));
-		showMessage(vali.message());
+		ResponseDto responseDto = bookController.returnBook(getUsername(), getInput("반납할 도서의 번호를 선택해주세요."));
+		showMessage(responseDto.message());
+		
+		while(!responseDto.isValid()) {
+			responseDto = bookController.payLateFee(getInput(responseDto.message()));
+		}
 	}
-	
 }

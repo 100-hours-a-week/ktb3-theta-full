@@ -16,9 +16,9 @@ public class Main {
 		FileService fileService = new FileService(bookRepository);
 		BookService bookService = new BookService(dateUtil, bookRepository, fileService);
 		
-		View view = new View();
-		BookController bookController = new BookController(view, bookService);
-		view.setController(bookController);
+		
+		BookController bookController = new BookController(bookService);
+		View view = new View(bookController);
 		
 		fileService.readData();
 		view.runApplication();

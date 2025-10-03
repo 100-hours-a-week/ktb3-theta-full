@@ -11,6 +11,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class BookService {
+	private static final int LATE_FEE = 100;
 	
 	private final DateUtil dateUtil;
 	private final BookRepository bookRepository;
@@ -63,9 +64,16 @@ public class BookService {
 		if (book.getRentedBy().isEmpty() || !book.getRentedBy().equals(userName)) {
 			return new ResponseDto(false, "대여 중인 도서가 아닙니다.\n");
 		} if(isLate(book)) {
-			return new ResponseDto(false, "연체되었습니다.\n");
+			return new ResponseDto(false, "연체되었습니다. 연체료 " + LATE_FEE + "를 납부해주세요.\n");
 		}
 		return processReturn(book);
+	}
+	
+	public ResponseDto payLateFee(int fee) {
+		if(fee != LATE_FEE) {
+			return new ResponseDto(false, "연체료는 " + LATE_FEE + "원 입니다.\n");
+		}
+		return new ResponseDto(true, "연체료가 납부됐습니다.\n");
 	}
 	
 	public ResponseDto processReturn(int index) {

@@ -10,6 +10,10 @@ public class DateUtil {
 		return LocalDateTime.now().plusWeeks(2).toString();
 	}
 	
+	public String parseStringToShortDate(String date) {
+		return LocalDateTime.parse(date, dtf).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+	}
+	
 	public LocalDateTime parseStringToDate(String date) {
 		return LocalDateTime.parse(date, dtf);
 	}

@@ -46,7 +46,7 @@ public class BookService {
 		if (book.getRentedBy().equals(userName)) {
 			return new ResponseDto(false, "사용자가 이미 대여 중인 도서입니다.\n");
 		} else if (!book.getRentedBy().isEmpty()) {
-			return new ResponseDto(false, "이미 다른 사용자가 대여 중인 도서입니다. 대여 만료일은 " + book.getRentalDate() + "이니 기다려주세요.\n");
+			return new ResponseDto(false, "이미 다른 사용자가 대여 중인 도서입니다. 대여 만료일은 " + dateUtil.parseStringToShortDate(book.getRentalDate()) + "이니 기다려주세요.\n");
 		}
 		
 		bookRepository.changeBookStatus(book, userName, dateUtil.getReturnDueDate());

@@ -59,10 +59,11 @@ public class BookService {
 		Book book = bookRepository.getBook(index);
 		if (book.getRentedBy().isEmpty() || !book.getRentedBy().equals(userName)) {
 			return new ResponseDto(false, "대여 중인 도서가 아닙니다.\n");
-		} if(isLate(book)) {
+		} else if(isLate(book)) {
 			return new ResponseDto(false, "연체되었습니다. 연체료 " + LATE_FEE + "를 납부해주세요.\n");
+		} else {
+			return processReturn(book);
 		}
-		return processReturn(book);
 	}
 	
 	// 연체료 납부

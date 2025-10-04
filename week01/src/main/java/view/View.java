@@ -5,6 +5,7 @@ import dto.ResponseDto;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.Optional;
 
 public class View {
 	private final BufferedReader reader = new BufferedReader(new java.io.InputStreamReader(System.in));
@@ -65,28 +66,28 @@ public class View {
 		System.out.print("> ");
 	}
 	
-	public String getUsername() {
+	public Optional<String> getUsername() {
 		System.out.print("유저 이름을 입력해주세요.\n> ");
 		try {
-			return reader.readLine();
+			return Optional.of(reader.readLine());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return null;
+		return Optional.empty();
 	}
 	
-	public int getInput(String message) {
+	public Optional<Integer> getInput(String message) {
 		System.out.print(message + "\n> ");
 		
 		try {
 			String answer = reader.readLine();
-			return Integer.parseInt(answer);
+			return Optional.of(Integer.parseInt(answer));
 		} catch (NumberFormatException e) {
 			System.out.println("잘못된 입력입니다. 재시도해주세요.");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return -1;
+		return Optional.empty();
 	}
 	
 	public void showMessage(String message) {
@@ -100,18 +101,26 @@ public class View {
 	public void rentBook() {
 		showMessage(bookController.viewBooks());
 		
-		ResponseDto responseDto = bookController.rentBook(getUsername(), getInput("빌릴 도서의 번호를 선택해주세요."));
+		String userName = getUsername().orElseThrow();
+		Integer index = getInput("빌릴 도서의 번호를 선택해주세요.").orElseThrow();
+		ResponseDto responseDto = bookController.rentBook(userName, index);
 		showMessage(responseDto.message());
 	}
 	
 	public void returnBook() {
 		showMessage(bookController.viewBooks());
 		
-		ResponseDto responseDto = bookController.returnBook(getUsername(), getInput("반납할 도서의 번호를 선택해주세요."));
-		showMessage(responseDto.message());
+		String userName = getUsername().orElseThrow();
+		int index = getInput("반납할 도서의 번호를 선택해주세요.").orElseThrow();
+		ResponseDto responseDto = bookController.returnBook(userName, index);
 		
-		while(!responseDto.isValid()) {
-			responseDto = bookController.payLateFee(getInput(responseDto.message()));
+		if (!responseDto.isValid() && responseDto.message().contains("연체")) {
+			while (!responseDto.isValid()) {
+				Integer fee = getInput(responseDto.message()).orElseThrow();
+				responseDto = bookController.payLateFee(index, fee);
+			}
+		} else {
+			showMessage(responseDto.message());
 		}
 	}
 }

@@ -27,15 +27,15 @@ public class BookController {
 			return new ResponseDto(false, "잘못된 도서 번호입니다.\n");
 		}
 		
-		ResponseDto responseDto = bookService.returnBook(userName, index-1);
-		
-		if(!responseDto.isValid() && responseDto.message().contains("연체")) {
-			return responseDto;
-		}
-		return bookService.processReturn(index);
+		return bookService.returnBook(userName, index-1);
 	}
 	
-	public ResponseDto payLateFee(int fee) {
-		return bookService.payLateFee(fee);
+	public ResponseDto payLateFee(int index, int fee) {
+		ResponseDto responseDto = bookService.payLateFee(fee);
+		
+		if(responseDto.isValid()) {
+			responseDto = bookService.processReturn(index);
+		}
+		return responseDto;
 	}
 }

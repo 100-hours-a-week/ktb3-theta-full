@@ -5,7 +5,6 @@ import dto.ResponseDto;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.Optional;
 
 public class View {
 	private final BufferedReader reader = new BufferedReader(new java.io.InputStreamReader(System.in));
@@ -66,28 +65,35 @@ public class View {
 		System.out.print("> ");
 	}
 	
-	public Optional<String> getUsername() {
-		System.out.print("유저 이름을 입력해주세요.\n> ");
-		try {
-			return Optional.of(reader.readLine());
-		} catch (IOException e) {
-			e.printStackTrace();
+	public String getUsername() {
+		while(true) {
+			System.out.print("유저 이름을 입력해주세요.\n> ");
+			try {
+				String username = reader.readLine();
+				
+				if(username.isEmpty()) {
+					System.out.println("유저 이름을 다시 입력해주세요.");
+					continue;
+				}
+				return username;
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
-		return Optional.empty();
 	}
 	
-	public Optional<Integer> getInput(String message) {
-		System.out.print(message + "\n> ");
-		
-		try {
-			String answer = reader.readLine();
-			return Optional.of(Integer.parseInt(answer));
-		} catch (NumberFormatException e) {
-			System.out.println("잘못된 입력입니다. 재시도해주세요.");
-		} catch (IOException e) {
-			e.printStackTrace();
+	public int getInput(String message) {
+		while(true) {
+			System.out.print(message + "\n> ");
+			try {
+				String answer = reader.readLine();
+				return Integer.parseInt(answer);
+			} catch (NumberFormatException e) {
+				System.out.println("잘못된 입력입니다. 재시도해주세요.");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
-		return Optional.empty();
 	}
 	
 	public void showMessage(String message) {
@@ -101,8 +107,8 @@ public class View {
 	public void rentBook() {
 		showMessage(bookController.viewBooks());
 		
-		String userName = getUsername().orElseThrow();
-		Integer index = getInput("빌릴 도서의 번호를 선택해주세요.").orElseThrow();
+		String userName = getUsername();
+		int index = getInput("빌릴 도서의 번호를 선택해주세요.");
 		ResponseDto responseDto = bookController.rentBook(userName, index);
 		showMessage(responseDto.message());
 	}
@@ -110,13 +116,13 @@ public class View {
 	public void returnBook() {
 		showMessage(bookController.viewBooks());
 		
-		String userName = getUsername().orElseThrow();
-		int index = getInput("반납할 도서의 번호를 선택해주세요.").orElseThrow();
+		String userName = getUsername();
+		int index = getInput("반납할 도서의 번호를 선택해주세요.");
 		ResponseDto responseDto = bookController.returnBook(userName, index);
 		
 		if (!responseDto.isValid() && responseDto.message().contains("연체")) {
 			while (!responseDto.isValid()) {
-				Integer fee = getInput(responseDto.message()).orElseThrow();
+				int fee = getInput(responseDto.message());
 				responseDto = bookController.payLateFee(index, fee);
 			}
 		} else {

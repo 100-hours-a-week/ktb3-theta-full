@@ -4,8 +4,10 @@ import domain.user.entity.User;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 @Repository
 public class UserRepositoryImpl implements UserRepository {
@@ -31,10 +33,8 @@ public class UserRepositoryImpl implements UserRepository {
 	
 	@Override
 	public User update(Long userId, User user) {
-		User oldUser = users.get(userId);
-		if (oldUser == null) {
-			throw new IllegalArgumentException("User not found");
-		}
+		User oldUser = findById(userId)
+				.orElseThrow(() -> new IllegalArgumentException("User not found"));
 		
 		if(!user.getNickname().isEmpty()) {
 			oldUser.setNickname(user.getNickname());
@@ -43,16 +43,17 @@ public class UserRepositoryImpl implements UserRepository {
 		if(!user.getProfileImage().isEmpty()) {
 			oldUser.setProfileImage(user.getProfileImage());
 		}
+		
+		oldUser.setUpdatedAt(LocalDateTime.now());
 		return oldUser;
 	}
 	
 	@Override
 	public void updatePassword(Long userId, String password) {
-		User user = users.get(userId);
-		if (user == null) {
-			throw new IllegalArgumentException("User not found");
-		}
+		User user = findById(userId)
+				.orElseThrow(() -> new IllegalArgumentException("User not found"));
 		
+		user.setUpdatedAt(LocalDateTime.now());
 		user.setPassword(password);
 	}
 	
@@ -63,11 +64,18 @@ public class UserRepositoryImpl implements UserRepository {
 	
 	@Override
 		public Optional<User> findById (Long id){
-			return users.values().stream().filter(user -> user.getUserId().equals(id)).findFirst();
+			return Optional.ofNullable(users.get(id));
 		}
 		
 		@Override
 		public Optional<User> findByEmail (String email){
 			return users.values().stream().filter(user -> user.getEmail().equals(email)).findFirst();
 		}
+
+	@Override
+	public List<User> findByIds(List<Long> userIds) {
+		return users.values().stream()
+				.filter(user -> userIds.contains(user.getUserId()))
+				.collect(Collectors.toList());
 	}
+}

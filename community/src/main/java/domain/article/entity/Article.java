@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -14,10 +16,14 @@ public class Article extends BaseEntity {
 	private String title;
 	private String content;
 	private String articleImage;
-	private Long userId;
+	
 	private int likeCount;
 	private int viewCount;
 	private int commentCount;
+	
+	private LocalDateTime deletedAt;
+	
+	private Long userId;
 	
 	public static Article create(String title, String content, String articleImage, Long userId) {
 		return new Article(
@@ -25,10 +31,11 @@ public class Article extends BaseEntity {
 				title,
 				content,
 				articleImage,
-				userId,
 				0,
 				0,
-				0
+				0,
+				null,
+				userId
 		);
 	}
 }

@@ -49,17 +49,20 @@ public class ArticleRepositoryImpl implements ArticleRepository {
 	
 	@Override
 	public Optional<Article> findById(Long articleId) {
-		return Optional.ofNullable(articles.get(articleId));
+		Article article = articles.get(articleId);
+		if (article == null || article.getDeletedAt() != null) {
+			return Optional.empty();
+		}
+		return Optional.of(article);
 	}
 
 	@Override
 	public List<Article> findAll(int page, int size) {
 		return articles.values().stream()
-				// 최신 순 정렬
-				.sorted(Comparator.comparing(Article::getCreatedAt).reversed())
-				// 현재 페이지 수와 사이즈 기준, 필요한 만큼
+				.filter(article -> article.getDeletedAt() == null)
+				.sorted(Comparator.comparing(Article::getCreatedAt).reversed()) // 최신 순 정렬
 				.skip((long) (page - 1) * size)
-				.limit(size)
+				.limit(size) // 현재 페이지 수와 사이즈 기준, 필요한 만큼
 				.collect(Collectors.toList());
 	}
 
@@ -71,12 +74,12 @@ public class ArticleRepositoryImpl implements ArticleRepository {
 			throw new IllegalArgumentException("You are not the author of this article");
 		}
 		
-		articles.remove(articleId);
+		article.setDeletedAt(LocalDateTime.now());
 	}
 
 	@Override
 	public long count() {
-		return articles.size();
+		return articles.values().stream().filter(article -> article.getDeletedAt() == null).count();
 	}
 
 	@Override

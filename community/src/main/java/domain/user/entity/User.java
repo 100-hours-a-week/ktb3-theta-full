@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 @Getter
@@ -25,10 +26,13 @@ public class User extends BaseEntity {
 	@Setter
 	private String profileImage;
 	
+	@Setter
+	private LocalDateTime deletedAt;
+	
 	private ArrayList<Long> articleIds;
 	private ArrayList<Long> commentIds;
 	
 	public static User create(String nickname, String password, String email, String profileImage) {
-		return new User(null, nickname, email, password, profileImage, new ArrayList<>(), new ArrayList<>());
+		return new User(null, nickname, email, password, profileImage, null, new ArrayList<>(), new ArrayList<>());
 	}
 }

@@ -59,23 +59,31 @@ public class UserRepositoryImpl implements UserRepository {
 	
 	@Override
 	public void deleteById(Long id) {
-		users.remove(id);
+		User user = findById(id)
+				.orElseThrow(() -> new IllegalArgumentException("User not found"));
+		user.setDeletedAt(LocalDateTime.now());
 	}
 	
 	@Override
 		public Optional<User> findById (Long id){
-			return Optional.ofNullable(users.get(id));
+			User user = users.get(id);
+			if (user == null || user.getDeletedAt() != null) {
+				return Optional.empty();
+			}
+			return Optional.of(user);
 		}
 		
 		@Override
 		public Optional<User> findByEmail (String email){
-			return users.values().stream().filter(user -> user.getEmail().equals(email)).findFirst();
+			return users.values().stream()
+					.filter(user -> user.getDeletedAt() == null && user.getEmail().equals(email))
+					.findFirst();
 		}
 
 	@Override
 	public List<User> findByIds(List<Long> userIds) {
 		return users.values().stream()
-				.filter(user -> userIds.contains(user.getUserId()))
+				.filter(user -> user.getDeletedAt() == null && userIds.contains(user.getUserId()))
 				.collect(Collectors.toList());
 	}
 }

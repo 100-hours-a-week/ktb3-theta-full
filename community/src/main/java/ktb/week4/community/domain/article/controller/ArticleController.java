@@ -1,5 +1,6 @@
 package ktb.week4.community.domain.article.controller;
 
+import jakarta.validation.constraints.Min;
 import ktb.week4.community.domain.article.dto.ArticleResponseDto;
 import ktb.week4.community.domain.article.dto.CreateArticleRequestDto;
 import ktb.week4.community.domain.article.dto.GetArticlesResponseDto;
@@ -20,8 +21,8 @@ public class ArticleController {
 	
 	@GetMapping
 	public ApiResponse<GetArticlesResponseDto> getArticles(
-			@RequestParam(name = "page") int page,
-			@RequestParam(name = "size", defaultValue = "7") int size) {
+			@RequestParam(name = "page") @Min(value = 1, message = "Page parameter must be at least 1") int page,
+			@RequestParam(name = "size", defaultValue = "7") @Min(value = 1, message = "Size parameter must be at least 1") int size) {
 		return ApiResponse.onSuccess("articles_success", articleQueryService.getArticles(page, size));
 	}
 	

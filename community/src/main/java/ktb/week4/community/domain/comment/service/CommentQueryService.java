@@ -7,6 +7,8 @@ import ktb.week4.community.domain.comment.entity.Comment;
 import ktb.week4.community.domain.comment.repository.CommentRepository;
 import ktb.week4.community.domain.user.entity.User;
 import ktb.week4.community.domain.user.repository.UserRepository;
+import ktb.week4.community.global.exception.ErrorCode;
+import ktb.week4.community.global.exception.GeneralException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +27,7 @@ public class CommentQueryService {
 
     public GetCommentsResponseDto getComments(Long articleId, int page, int size) {
         articleRepository.findById(articleId)
-                .orElseThrow(() -> new IllegalArgumentException("article_not_found"));
+                .orElseThrow(() -> new GeneralException(ErrorCode.ARTICLE_NOT_FOUND));
 
         List<Comment> comments = commentRepository.findAllByArticleId(articleId, page, size);
         long totalCount = commentRepository.countByArticleId(articleId);

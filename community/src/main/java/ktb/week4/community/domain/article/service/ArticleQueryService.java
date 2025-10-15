@@ -6,6 +6,8 @@ import ktb.week4.community.domain.article.entity.Article;
 import ktb.week4.community.domain.article.repository.ArticleRepository;
 import ktb.week4.community.domain.user.entity.User;
 import ktb.week4.community.domain.user.repository.UserRepository;
+import ktb.week4.community.global.exception.ErrorCode;
+import ktb.week4.community.global.exception.GeneralException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -21,9 +23,6 @@ public class ArticleQueryService {
     private final UserRepository userRepository;
 
     public GetArticlesResponseDto getArticles(int page, int size) {
-		if(page <= 0) {
-			throw new IllegalArgumentException("Wrong page parameter");
-		}
         List<Article> articles = articleRepository.findAll(page, size);
         List<Long> userIds = articles.stream()
                 .map(Article::getUserId)
@@ -49,9 +48,9 @@ public class ArticleQueryService {
 
     public ArticleResponseDto getArticle(Long articleId) {
         Article article = articleRepository.findById(articleId)
-                .orElseThrow(() -> new IllegalArgumentException("Article not found"));
+                .orElseThrow(() -> new GeneralException(ErrorCode.ARTICLE_NOT_FOUND));
         User user = userRepository.findById(article.getUserId())
-                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+                .orElseThrow(() -> new GeneralException(ErrorCode.USER_NOT_FOUND));
         return ArticleResponseDto.fromEntity(article, user);
     }
 }

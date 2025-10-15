@@ -8,21 +8,22 @@ import org.springframework.http.HttpStatus;
 @Getter
 public enum ErrorCode implements BaseErrorCode {
 	
-	_INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "COMMON500", "internal_server_error"),
 	_BAD_REQUEST(HttpStatus.BAD_REQUEST, "COMMON400", "invalid_request"),
+	_INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "COMMON500", "internal_server_error"),
 	
 	UNAUTHORIZED_REQUEST(HttpStatus.UNAUTHORIZED, "AUTH401", "unauthorized_request"),
 	FORBIDDEN_REQUEST(HttpStatus.FORBIDDEN, "AUTH403", "forbidden_request"),
 	EMAIL_ALREADY_EXISTS(HttpStatus.CONFLICT, "AUTH409", "email_already_exists"),
 	
 	// 유저
-	USER_NOT_FOUND(HttpStatus.NOT_FOUND, "USER4001", "User not found"),
+	USER_NOT_FOUND(HttpStatus.NOT_FOUND, "USER4004", "User not found"),
 	
 	// 게시글
-	ARTICLE_NOT_FOUND(HttpStatus.NOT_FOUND, "ARTICLE4001", "Article not found"),
+	ARTICLE_NOT_FOUND(HttpStatus.NOT_FOUND, "ARTICLE4004", "Article not found"),
 	
 	// 댓글
-	COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "COMMENT4001", "Comment not found"),
+	COMMENT_NOT_BELONG_TO_ARTICLE(HttpStatus.NOT_FOUND, "COMMENT4000", "Comment does not belong to article"),
+	COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "COMMENT4004", "Comment not found"),
 	;
 	
 	private final HttpStatus httpStatus;

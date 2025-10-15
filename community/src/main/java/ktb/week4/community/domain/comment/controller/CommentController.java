@@ -1,5 +1,6 @@
 package ktb.week4.community.domain.comment.controller;
 
+import jakarta.validation.constraints.Min;
 import ktb.week4.community.domain.comment.dto.CommentResponseDto;
 import ktb.week4.community.domain.comment.dto.CreateCommentRequestDto;
 import ktb.week4.community.domain.comment.dto.GetCommentsResponseDto;
@@ -21,8 +22,8 @@ public class CommentController {
 
     @GetMapping
     public ApiResponse<GetCommentsResponseDto> getComments(@PathVariable Long articleId,
-            @RequestParam(name = "page") int page,
-            @RequestParam(name = "size", defaultValue = "7") int size) {
+            @RequestParam(name = "page")  @Min(value = 1, message = "Page parameter must be at least 1") int page,
+            @RequestParam(name = "size", defaultValue = "7") @Min(value = 1, message = "Size parameter must be at least 1") int size) {
         return ApiResponse.onSuccess("comments_success", commentQueryService.getComments(articleId, page, size));
     }
 
@@ -33,12 +34,12 @@ public class CommentController {
 
     @PatchMapping("/{commentId}")
     public ApiResponse<CommentResponseDto> updateComment(@PathVariable Long articleId, @PathVariable Long commentId, @RequestParam Long userId, @RequestBody UpdateCommentRequestDto request) {
-        return ApiResponse.onSuccess("comments_update_success", commentCommandService.updateComment(userId, commentId, request));
+        return ApiResponse.onSuccess("comments_update_success", commentCommandService.updateComment(articleId, userId, commentId, request));
     }
 
     @DeleteMapping("/{commentId}")
     public ResponseEntity<Void> deleteComment(@PathVariable Long articleId, @PathVariable Long commentId, @RequestParam Long userId) {
-        commentCommandService.deleteComment(userId, commentId);
+        commentCommandService.deleteComment(articleId, userId, commentId);
 		return ApiResponse.onDeleteSuccess();
     }
 }

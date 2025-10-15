@@ -1,12 +1,12 @@
 package ktb.week4.community.domain.article.repository;
 
 import ktb.week4.community.domain.article.entity.Article;
+import ktb.week4.community.domain.user.entity.User;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
@@ -26,13 +26,7 @@ public class ArticleRepositoryImpl implements ArticleRepository {
 	}
 	
 	@Override
-	public Article update(Long userId, Long articleId, Article article) {
-		Article oldArticle = findById(articleId)
-				.orElseThrow(() -> new IllegalArgumentException("Article not found"));
-		if (!Objects.equals(oldArticle.getUserId(), userId)) {
-			throw new IllegalArgumentException("You are not the author of this article");
-		}
-		
+	public Article update(User user, Article oldArticle, Article article) {
 		if (!article.getTitle().isEmpty()) {
 			oldArticle.setTitle(article.getTitle());
 		}
@@ -55,7 +49,7 @@ public class ArticleRepositoryImpl implements ArticleRepository {
 		}
 		return Optional.of(article);
 	}
-
+	
 	@Override
 	public List<Article> findAll(int page, int size) {
 		return articles.values().stream()
@@ -65,55 +59,39 @@ public class ArticleRepositoryImpl implements ArticleRepository {
 				.limit(size)
 				.collect(Collectors.toList());
 	}
-
+	
 	@Override
-	public void deleteByArticleId(Long userId, Long articleId) {
-		Article article = findById(articleId)
-				.orElseThrow(() -> new IllegalArgumentException("Article not found"));
-		if (!Objects.equals(article.getUserId(), userId)) {
-			throw new IllegalArgumentException("You are not the author of this article");
-		}
-		
+	public void deleteByArticleId(Article article) {
 		article.setDeletedAt(LocalDateTime.now());
 	}
-
+	
 	@Override
 	public long count() {
 		return articles.values().stream().filter(article -> article.getDeletedAt() == null).count();
 	}
-
+	
 	@Override
-	public void increaseViewCount(Long articleId) {
-		Article article = findById(articleId)
-				.orElseThrow(() -> new IllegalArgumentException("Article not found"));
+	public void increaseViewCount(Article article) {
 		article.setViewCount(article.getViewCount() + 1);
 	}
-
+	
 	@Override
-	public void incrementCommentCount(Long articleId) {
-		Article article = findById(articleId)
-				.orElseThrow(() -> new IllegalArgumentException("Article not found"));
+	public void incrementCommentCount(Article article) {
 		article.setCommentCount(article.getCommentCount() + 1);
 	}
-
+	
 	@Override
-	public void decrementCommentCount(Long articleId) {
-		Article article = findById(articleId)
-				.orElseThrow(() -> new IllegalArgumentException("Article not found"));
+	public void decrementCommentCount(Article article) {
 		article.setCommentCount(article.getCommentCount() - 1);
 	}
-
+	
 	@Override
-	public void incrementLikeCount(Long articleId) {
-		Article article = findById(articleId)
-				.orElseThrow(() -> new IllegalArgumentException("Article not found"));
+	public void incrementLikeCount(Article article) {
 		article.setLikeCount(article.getLikeCount() + 1);
 	}
-
+	
 	@Override
-	public void decrementLikeCount(Long articleId) {
-		Article article = findById(articleId)
-				.orElseThrow(() -> new IllegalArgumentException("Article not found"));
+	public void decrementLikeCount(Article article) {
 		article.setLikeCount(article.getLikeCount() - 1);
 	}
 }

@@ -6,6 +6,8 @@ import ktb.week4.community.domain.article.service.ArticleCommandService;
 import ktb.week4.community.domain.like.dto.LikeResponseDto;
 import ktb.week4.community.domain.like.entity.LikeArticle;
 import ktb.week4.community.domain.like.repository.LikeRepository;
+import ktb.week4.community.global.exception.ErrorCode;
+import ktb.week4.community.global.exception.GeneralException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +21,7 @@ public class LikeCommandService {
 
     public LikeResponseDto likeArticle(Long articleId, Long userId) {
 		Article updatedArticle = articleRepository.findById(articleId)
-                .orElseThrow(() -> new IllegalArgumentException("article_not_found"));
+                .orElseThrow(() -> new GeneralException(ErrorCode.ARTICLE_NOT_FOUND));
 		
         if (!likeRepository.existsByUserIdAndArticleId(userId, articleId)) {
             likeRepository.save(new LikeArticle(null, articleId, userId));
@@ -31,7 +33,7 @@ public class LikeCommandService {
 
     public void unlikeArticle(Long articleId, Long userId) {
         articleRepository.findById(articleId)
-                .orElseThrow(() -> new IllegalArgumentException("article_not_found"));
+                .orElseThrow(() -> new GeneralException(ErrorCode.ARTICLE_NOT_FOUND));
 
         likeRepository.findByUserIdAndArticleId(userId, articleId).ifPresent(likeArticle -> {
             likeRepository.delete(likeArticle);

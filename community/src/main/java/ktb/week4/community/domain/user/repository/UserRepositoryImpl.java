@@ -16,11 +16,6 @@ public class UserRepositoryImpl implements UserRepository {
 	
 	@Override
 	public User save(User user) {
-		// 이미 존재하는 이메일일 경우 예외 처리
-		if (findByEmail(user.getEmail()).isPresent()) {
-			throw new IllegalArgumentException("Email already exists");
-		}
-		
 		// ID  및 생성 시간 설정
 		user.setId(users.keySet().stream()
 				.max(Long::compareTo)
@@ -32,10 +27,7 @@ public class UserRepositoryImpl implements UserRepository {
 	}
 	
 	@Override
-	public User update(Long userId, User user) {
-		User oldUser = findById(userId)
-				.orElseThrow(() -> new IllegalArgumentException("User not found"));
-		
+	public User update(User oldUser, User user) {
 		if(!user.getNickname().isEmpty()) {
 			oldUser.setNickname(user.getNickname());
 		}
@@ -49,18 +41,13 @@ public class UserRepositoryImpl implements UserRepository {
 	}
 	
 	@Override
-	public void updatePassword(Long userId, String password) {
-		User user = findById(userId)
-				.orElseThrow(() -> new IllegalArgumentException("User not found"));
-		
+	public void updatePassword(User user, String password) {
 		user.setUpdatedAt(LocalDateTime.now());
 		user.setPassword(password);
 	}
 	
 	@Override
-	public void deleteById(Long id) {
-		User user = findById(id)
-				.orElseThrow(() -> new IllegalArgumentException("User not found"));
+	public void deleteById(User user) {
 		user.setDeletedAt(LocalDateTime.now());
 	}
 	

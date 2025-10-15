@@ -9,6 +9,8 @@ import ktb.week4.community.domain.comment.entity.Comment;
 import ktb.week4.community.domain.comment.repository.CommentRepository;
 import ktb.week4.community.domain.user.entity.User;
 import ktb.week4.community.domain.user.repository.UserRepository;
+import ktb.week4.community.global.exception.ErrorCode;
+import ktb.week4.community.global.exception.GeneralException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -23,10 +25,10 @@ public class CommentCommandService {
 
     public CommentResponseDto createComment(Long userId, Long articleId, CreateCommentRequestDto request) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+                .orElseThrow(() -> new GeneralException(ErrorCode.USER_NOT_FOUND));
         articleRepository.findById(articleId)
-                .orElseThrow(() -> new IllegalArgumentException("Article not found"));
-
+                .orElseThrow(() -> new GeneralException(ErrorCode.ARTICLE_NOT_FOUND));
+		
         Comment comment = Comment.create(request.content(), userId, articleId);
         Comment savedComment = commentRepository.save(comment);
 
@@ -35,32 +37,37 @@ public class CommentCommandService {
         return CommentResponseDto.fromEntity(savedComment, user);
     }
 
-    public CommentResponseDto updateComment(Long userId, Long commentId, UpdateCommentRequestDto request) {
+    public CommentResponseDto updateComment(Long articleId, Long userId, Long commentId, UpdateCommentRequestDto request) {
         Comment comment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new IllegalArgumentException("comment_not_found"));
+                .orElseThrow(() -> new GeneralException(ErrorCode.COMMENT_NOT_FOUND));
 
         if (!comment.getUserId().equals(userId)) {
-            throw new IllegalArgumentException("forbidden_request");
+            throw new GeneralException(ErrorCode.FORBIDDEN_REQUEST);
         }
+		if(!comment.getArticleId().equals(articleId)) {
+			throw new GeneralException(ErrorCode.COMMENT_NOT_BELONG_TO_ARTICLE);
+		}
 
         comment.setContent(request.content());
         Comment updatedComment = commentRepository.update(comment);
 
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+                .orElseThrow(() -> new GeneralException(ErrorCode.USER_NOT_FOUND));
 
         return CommentResponseDto.fromEntity(updatedComment, user);
     }
 
-    public void deleteComment(Long userId, Long commentId) {
+    public void deleteComment(Long articleId, Long userId, Long commentId) {
         Comment comment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new IllegalArgumentException("comment_not_found"));
+                .orElseThrow(() -> new GeneralException(ErrorCode.COMMENT_NOT_FOUND));
 
         if (!comment.getUserId().equals(userId)) {
-            throw new IllegalArgumentException("forbidden_request");
+            throw new GeneralException(ErrorCode.FORBIDDEN_REQUEST);
         }
+		if(!comment.getArticleId().equals(articleId)) {
+			throw new GeneralException(ErrorCode.COMMENT_NOT_BELONG_TO_ARTICLE);
+		}
 
-        Long articleId = comment.getArticleId();
         commentRepository.delete(commentId);
 
         articleCommandService.decrementCommentCount(articleId);

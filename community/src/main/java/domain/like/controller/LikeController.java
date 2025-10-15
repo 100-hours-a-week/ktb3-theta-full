@@ -37,6 +37,6 @@ public class LikeController {
             @PathVariable Long articleId,
             @RequestParam Long userId) {
         likeCommandService.unlikeArticle(articleId, userId);
-        return ResponseEntity.noContent().build();
+		return ApiResponse.onDeleteSuccess();
     }
 }

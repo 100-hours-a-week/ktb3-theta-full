@@ -17,7 +17,7 @@ public class UserController {
 	
 	@PostMapping("/users")
 	public ApiResponse<SignUpResponseDto> registerUser(@RequestBody SignUpRequestDto request) {
-		return ApiResponse.onSuccess("register_success", userCommandService.createUser(request));
+		return ApiResponse.onCreateSuccess("register_success", userCommandService.createUser(request));
 	}
 	
 	@GetMapping("/users")
@@ -41,7 +41,7 @@ public class UserController {
 	@DeleteMapping("/users")
 	public ResponseEntity<Void> deleteUser(@RequestParam Long userId) {
 		userCommandService.deleteUser(userId);
-		return ResponseEntity.noContent().build();
+		return ApiResponse.onDeleteSuccess();
 	}
 	
 	@PostMapping("/auth/login")
@@ -52,6 +52,6 @@ public class UserController {
 	@PostMapping("/auth/logout")
 	public ResponseEntity<Void> logout(@RequestParam Long userId) {
 		userQueryService.logout(userId);
-		return ResponseEntity.noContent().build();
+		return ApiResponse.onDeleteSuccess();
 	}
 }

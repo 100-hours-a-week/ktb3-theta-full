@@ -8,7 +8,6 @@ import domain.comment.service.CommentCommandService;
 import domain.comment.service.CommentQueryService;
 import global.apiPayload.ApiResponse;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,9 +27,8 @@ public class CommentController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse<CommentResponseDto>> createComment(@PathVariable Long articleId, @RequestParam Long userId, @RequestBody CreateCommentRequestDto request) {
-        ApiResponse<CommentResponseDto> response = ApiResponse.onSuccess("comments_create_success", commentCommandService.createComment(userId, articleId, request));
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    public ApiResponse<CommentResponseDto> createComment(@PathVariable Long articleId, @RequestParam Long userId, @RequestBody CreateCommentRequestDto request) {
+		return ApiResponse.onCreateSuccess("comments_create_success", commentCommandService.createComment(userId, articleId, request));
     }
 
     @PatchMapping("/{commentId}")
@@ -41,6 +39,6 @@ public class CommentController {
     @DeleteMapping("/{commentId}")
     public ResponseEntity<Void> deleteComment(@PathVariable Long articleId, @PathVariable Long commentId, @RequestParam Long userId) {
         commentCommandService.deleteComment(userId, commentId);
-        return ResponseEntity.noContent().build();
+		return ApiResponse.onDeleteSuccess();
     }
 }

@@ -8,7 +8,6 @@ import domain.article.service.ArticleCommandService;
 import domain.article.service.ArticleQueryService;
 import global.apiPayload.ApiResponse;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,10 +26,8 @@ public class ArticleController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<ApiResponse<ArticleResponseDto>> createArticle(@RequestParam Long userId, @RequestBody CreateArticleRequestDto request) {
-		ApiResponse<ArticleResponseDto> response = ApiResponse.onSuccess("article_create_success", articleCommandService.createArticle(userId, request));
-		
-		return new ResponseEntity<>(response, HttpStatus.CREATED);
+	public ApiResponse<ArticleResponseDto> createArticle(@RequestParam Long userId, @RequestBody CreateArticleRequestDto request) {
+		return ApiResponse.onCreateSuccess("article_create_success", articleCommandService.createArticle(userId, request));
 	}
 	
 	@PatchMapping
@@ -41,7 +38,7 @@ public class ArticleController {
 	@DeleteMapping
 	public ResponseEntity<Void> deleteArticle(@RequestParam Long userId, @RequestParam Long articleId) {
 		articleCommandService.deleteArticle(userId, articleId);
-		return ResponseEntity.noContent().build();
+		return ApiResponse.onDeleteSuccess();
 	}
 	
 	@GetMapping("/{articleId}")

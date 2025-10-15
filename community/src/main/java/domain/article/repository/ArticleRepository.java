@@ -15,4 +15,6 @@ public interface ArticleRepository {
 	void increaseViewCount(Long articleId);
 	void incrementCommentCount(Long articleId);
 	void decrementCommentCount(Long articleId);
+	void incrementLikeCount(Long articleId);
+	void decrementLikeCount(Long articleId);
 }

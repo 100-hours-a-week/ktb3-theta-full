@@ -62,4 +62,12 @@ public class ArticleCommandService {
 	public void decrementCommentCount(Long articleId) {
 		articleRepository.decrementCommentCount(articleId);
 	}
+
+	public void incrementLikeCount(Long articleId) {
+		articleRepository.incrementLikeCount(articleId);
+	}
+
+	public void decrementLikeCount(Long articleId) {
+		articleRepository.decrementLikeCount(articleId);
+	}
 }

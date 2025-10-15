@@ -102,4 +102,18 @@ public class ArticleRepositoryImpl implements ArticleRepository {
 				.orElseThrow(() -> new IllegalArgumentException("Article not found"));
 		article.setCommentCount(article.getCommentCount() - 1);
 	}
+
+	@Override
+	public void incrementLikeCount(Long articleId) {
+		Article article = findById(articleId)
+				.orElseThrow(() -> new IllegalArgumentException("Article not found"));
+		article.setLikeCount(article.getLikeCount() + 1);
+	}
+
+	@Override
+	public void decrementLikeCount(Long articleId) {
+		Article article = findById(articleId)
+				.orElseThrow(() -> new IllegalArgumentException("Article not found"));
+		article.setLikeCount(article.getLikeCount() - 1);
+	}
 }

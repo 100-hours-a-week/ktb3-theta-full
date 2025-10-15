@@ -15,7 +15,7 @@ public record WrittenByResponseDto (
 	
 	public static WrittenByResponseDto fromEntity(User user) {
 		return new WrittenByResponseDto(
-				user.getUserId(),
+				user.getId(),
 				user.getNickname(),
 				user.getProfileImage()
 		);

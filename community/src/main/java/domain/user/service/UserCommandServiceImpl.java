@@ -20,7 +20,7 @@ public class UserCommandServiceImpl implements UserCommandService {
 				request.profileImage()
 		));
 		
-		return new SignUpResponseDto(user.getUserId());
+		return new SignUpResponseDto(user.getId());
 	}
 	
 	@Override

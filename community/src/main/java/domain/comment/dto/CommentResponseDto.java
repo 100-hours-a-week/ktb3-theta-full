@@ -16,7 +16,7 @@ public record CommentResponseDto(
 ) {
     public static CommentResponseDto fromEntity(Comment comment, User user) {
         return new CommentResponseDto(
-                comment.getCommentId(),
+                comment.getId(),
                 comment.getContent(),
                 comment.getCreatedAt(),
                 WrittenByResponseDto.fromEntity(user)

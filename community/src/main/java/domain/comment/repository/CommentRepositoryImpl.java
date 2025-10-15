@@ -17,11 +17,11 @@ public class CommentRepositoryImpl implements CommentRepository {
 	
 	@Override
 	public Comment save(Comment comment) {
-		comment.setCommentId(comments.keySet().stream()
+		comment.setId(comments.keySet().stream()
 				.max(Long::compareTo)
 				.orElse(0L) + 1);
 		comment.setCreatedAt(LocalDateTime.now());
-		comments.put(comment.getCommentId(), comment);
+		comments.put(comment.getId(), comment);
 		return comment;
 	}
 	
@@ -50,7 +50,7 @@ public class CommentRepositoryImpl implements CommentRepository {
 	@Override
 	public Comment update(Comment comment) {
 		comment.setUpdatedAt(LocalDateTime.now());
-		comments.put(comment.getCommentId(), comment);
+		comments.put(comment.getId(), comment);
 		return comment;
 	}
 	

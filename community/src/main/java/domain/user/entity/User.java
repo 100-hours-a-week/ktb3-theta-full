@@ -13,7 +13,7 @@ import java.util.ArrayList;
 public class User extends BaseEntity {
 	
 	@Setter
-	private Long userId;
+	private Long id;
 	
 	@Setter
 	private String nickname;

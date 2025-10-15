@@ -36,7 +36,7 @@ public class CommentQueryService {
                 .collect(Collectors.toList());
 
         Map<Long, User> userMap = userRepository.findByIds(userIds).stream()
-                .collect(Collectors.toMap(User::getUserId, Function.identity()));
+                .collect(Collectors.toMap(User::getId, Function.identity()));
 
         List<CommentResponseDto> responses = comments.stream()
                 .map(comment -> {

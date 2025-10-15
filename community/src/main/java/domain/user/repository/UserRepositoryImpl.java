@@ -22,13 +22,13 @@ public class UserRepositoryImpl implements UserRepository {
 		}
 		
 		// ID  및 생성 시간 설정
-		user.setUserId(users.keySet().stream()
+		user.setId(users.keySet().stream()
 				.max(Long::compareTo)
 				.orElse(0L) + 1);
 		user.setCreatedAt(LocalDateTime.now());
 		
-		users.put(user.getUserId(), user);
-		return users.get(user.getUserId());
+		users.put(user.getId(), user);
+		return users.get(user.getId());
 	}
 	
 	@Override
@@ -83,7 +83,7 @@ public class UserRepositoryImpl implements UserRepository {
 	@Override
 	public List<User> findByIds(List<Long> userIds) {
 		return users.values().stream()
-				.filter(user -> user.getDeletedAt() == null && userIds.contains(user.getUserId()))
+				.filter(user -> user.getDeletedAt() == null && userIds.contains(user.getId()))
 				.collect(Collectors.toList());
 	}
 }

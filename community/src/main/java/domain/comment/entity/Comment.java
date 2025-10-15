@@ -10,7 +10,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Comment extends BaseEntity {
 	
-	private Long commentId;
+	private Long id;
 	private String content;
 	private Long userId;
 	private Long articleId;

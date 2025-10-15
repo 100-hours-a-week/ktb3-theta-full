@@ -28,7 +28,7 @@ public class UserQueryServiceImpl  implements  UserQueryService {
 		}
 		
 		// 토큰 발급 등 로그인 처리 로직 진행
-		return new LoginResponseDto(user.getUserId(), user.getProfileImage());
+		return new LoginResponseDto(user.getId(), user.getProfileImage());
 	}
 	
 	@Override

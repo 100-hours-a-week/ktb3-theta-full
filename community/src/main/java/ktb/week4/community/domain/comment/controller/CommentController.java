@@ -1,5 +1,6 @@
 package ktb.week4.community.domain.comment.controller;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import ktb.week4.community.domain.comment.dto.CommentResponseDto;
 import ktb.week4.community.domain.comment.dto.CreateCommentRequestDto;
@@ -28,12 +29,12 @@ public class CommentController {
     }
 
     @PostMapping
-    public ApiResponse<CommentResponseDto> createComment(@PathVariable Long articleId, @RequestParam Long userId, @RequestBody CreateCommentRequestDto request) {
+    public ApiResponse<CommentResponseDto> createComment(@PathVariable Long articleId, @RequestParam Long userId, @RequestBody @Valid CreateCommentRequestDto request) {
 		return ApiResponse.onCreateSuccess("comments_create_success", commentCommandService.createComment(userId, articleId, request));
     }
 
     @PatchMapping("/{commentId}")
-    public ApiResponse<CommentResponseDto> updateComment(@PathVariable Long articleId, @PathVariable Long commentId, @RequestParam Long userId, @RequestBody UpdateCommentRequestDto request) {
+    public ApiResponse<CommentResponseDto> updateComment(@PathVariable Long articleId, @PathVariable Long commentId, @RequestParam Long userId, @RequestBody @Valid UpdateCommentRequestDto request) {
         return ApiResponse.onSuccess("comments_update_success", commentCommandService.updateComment(articleId, userId, commentId, request));
     }
 

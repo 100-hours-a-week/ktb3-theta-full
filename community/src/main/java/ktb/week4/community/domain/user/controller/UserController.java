@@ -1,5 +1,6 @@
 package ktb.week4.community.domain.user.controller;
 
+import jakarta.validation.Valid;
 import ktb.week4.community.domain.user.dto.*;
 import ktb.week4.community.domain.user.service.UserCommandService;
 import ktb.week4.community.domain.user.service.UserQueryService;
@@ -16,7 +17,7 @@ public class UserController {
 	private final UserQueryService userQueryService;
 	
 	@PostMapping("/users")
-	public ApiResponse<SignUpResponseDto> registerUser(@RequestBody SignUpRequestDto request) {
+	public ApiResponse<SignUpResponseDto> registerUser(@RequestBody @Valid SignUpRequestDto request) {
 		return ApiResponse.onCreateSuccess("register_success", userCommandService.createUser(request));
 	}
 	
@@ -33,7 +34,7 @@ public class UserController {
 	
 	@PatchMapping("/users/password")
 	public ApiResponse<Void> updatePassword(@RequestParam Long userId,
-											  @RequestBody UpdatePasswordRequestDto request) {
+											  @RequestBody @Valid UpdatePasswordRequestDto request) {
 		userCommandService.updatePassword(userId, request);
 		return ApiResponse.onSuccess("password_update_success", null);
 	}
@@ -45,7 +46,7 @@ public class UserController {
 	}
 	
 	@PostMapping("/auth/login")
-	public ApiResponse<LoginResponseDto> login(@RequestBody LoginRequestDto loginRequestDto) {
+	public ApiResponse<LoginResponseDto> login(@RequestBody @Valid LoginRequestDto loginRequestDto) {
 		return ApiResponse.onSuccess("login_success", userQueryService.login(loginRequestDto));
 	}
 	

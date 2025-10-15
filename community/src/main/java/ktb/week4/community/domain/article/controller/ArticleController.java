@@ -1,5 +1,6 @@
 package ktb.week4.community.domain.article.controller;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import ktb.week4.community.domain.article.dto.ArticleResponseDto;
 import ktb.week4.community.domain.article.dto.CreateArticleRequestDto;
@@ -27,12 +28,12 @@ public class ArticleController {
 	}
 	
 	@PostMapping
-	public ApiResponse<ArticleResponseDto> createArticle(@RequestParam Long userId, @RequestBody CreateArticleRequestDto request) {
+	public ApiResponse<ArticleResponseDto> createArticle(@RequestParam Long userId, @RequestBody @Valid CreateArticleRequestDto request) {
 		return ApiResponse.onCreateSuccess("article_create_success", articleCommandService.createArticle(userId, request));
 	}
 	
 	@PatchMapping
-	public ApiResponse<ArticleResponseDto> updateArticle(@RequestParam Long userId, @RequestParam Long articleId, @RequestBody UpdateArticleRequestDto request) {
+	public ApiResponse<ArticleResponseDto> updateArticle(@RequestParam Long userId, @RequestParam Long articleId, @RequestBody @Valid UpdateArticleRequestDto request) {
 		return ApiResponse.onSuccess("article_update_success", articleCommandService.updateArticle(userId, articleId, request));
 	}
 	

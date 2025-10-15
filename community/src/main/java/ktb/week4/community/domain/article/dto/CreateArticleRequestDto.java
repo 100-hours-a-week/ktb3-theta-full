@@ -4,10 +4,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
 
 public record CreateArticleRequestDto(
-		@NotBlank
+		@NotBlank(message = "게시글 제목은 필수입니다.")
 		String title,
 		
-		@NotBlank
+		@NotBlank(message = "게시글 본문은 필수입니다.")
 		String content,
 		
 		@JsonProperty("article_image")

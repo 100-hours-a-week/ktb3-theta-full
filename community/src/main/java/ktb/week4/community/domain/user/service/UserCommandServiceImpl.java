@@ -16,7 +16,7 @@ public class UserCommandServiceImpl implements UserCommandService {
 	@Override
 	public SignUpResponseDto createUser(SignUpRequestDto request) {
 		// 이미 존재하는 이메일일 경우
-		if(userRepository.findByEmail(request.email()).isEmpty()) {
+		if(userRepository.findByEmail(request.email()).isPresent()) {
 			throw new GeneralException(ErrorCode.EMAIL_ALREADY_EXISTS);
 		}
 		

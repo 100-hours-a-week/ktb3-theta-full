@@ -8,6 +8,7 @@ import domain.article.service.ArticleCommandService;
 import domain.article.service.ArticleQueryService;
 import global.apiPayload.ApiResponse;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,8 +27,10 @@ public class ArticleController {
 	}
 	
 	@PostMapping
-	public ApiResponse<ArticleResponseDto> createArticle(@RequestParam Long userId, @RequestBody CreateArticleRequestDto request) {
-		return ApiResponse.onSuccess("article_create_success", articleCommandService.createArticle(userId, request));
+	public ResponseEntity<ApiResponse<ArticleResponseDto>> createArticle(@RequestParam Long userId, @RequestBody CreateArticleRequestDto request) {
+		ApiResponse<ArticleResponseDto> response = ApiResponse.onSuccess("article_create_success", articleCommandService.createArticle(userId, request));
+		
+		return new ResponseEntity<>(response, HttpStatus.CREATED);
 	}
 	
 	@PatchMapping

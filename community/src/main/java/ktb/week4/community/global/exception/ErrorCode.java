@@ -32,6 +32,6 @@ public enum ErrorCode implements BaseErrorCode {
 	
 	@Override
 	public Reason getReason() {
-		return null;
+		return new Reason(this.httpStatus, this.code, this.message);
 	}
 }

@@ -33,7 +33,7 @@ public class ArticleRepositoryImpl implements ArticleRepository {
 		if (!article.getContent().isEmpty()) {
 			oldArticle.setContent(article.getContent());
 		}
-		if (!article.getArticleImage().isEmpty()) {
+		if (article.getArticleImage() != null && !article.getArticleImage().isEmpty()) {
 			oldArticle.setArticleImage(article.getArticleImage());
 		}
 		

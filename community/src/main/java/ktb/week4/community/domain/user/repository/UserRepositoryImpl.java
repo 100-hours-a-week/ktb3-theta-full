@@ -32,7 +32,7 @@ public class UserRepositoryImpl implements UserRepository {
 			oldUser.setNickname(user.getNickname());
 		}
 		
-		if(!user.getProfileImage().isEmpty()) {
+		if(user.getProfileImage() != null && !user.getProfileImage().isEmpty()) {
 			oldUser.setProfileImage(user.getProfileImage());
 		}
 		

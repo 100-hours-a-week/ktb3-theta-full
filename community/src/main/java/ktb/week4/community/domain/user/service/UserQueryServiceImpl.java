@@ -23,8 +23,7 @@ public class UserQueryServiceImpl  implements  UserQueryService {
 	
 	@Override
 	public LoginResponseDto login(LoginRequestDto request) {
-		User user = userRepository.findByEmail(request.email()).orElseThrow(() -> new GeneralException(ErrorCode.USER_NOT_FOUND));
-		
+		User user = userRepository.findByEmail(request.email()).orElseThrow(() -> new GeneralException(ErrorCode._BAD_REQUEST));
 		if(!request.password().equals(user.getPassword())) {
 			throw new GeneralException(ErrorCode._BAD_REQUEST);
 		}

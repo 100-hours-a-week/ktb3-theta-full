@@ -19,7 +19,9 @@ public class ArticleController {
 	private final ArticleQueryService articleQueryService;
 	
 	@GetMapping
-	public ApiResponse<GetArticlesResponseDto> getArticles(@RequestParam int page, @RequestParam int size) {
+	public ApiResponse<GetArticlesResponseDto> getArticles(
+			@RequestParam(name = "page") int page,
+			@RequestParam(name = "size", defaultValue = "7") int size) {
 		return ApiResponse.onSuccess("articles_success", articleQueryService.getArticles(page, size));
 	}
 	

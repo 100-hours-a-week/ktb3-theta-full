@@ -30,7 +30,7 @@ public class ArticleQueryService {
         Map<Long, User> userMap = userRepository.findByIds(userIds).stream()
                 .collect(Collectors.toMap(User::getUserId, Function.identity()));
 
-        List<ArticleResponseDto> articleResponseDtos = articles.stream()
+        List<ArticleResponseDto> responses = articles.stream()
                 .map(article -> {
                     User user = userMap.get(article.getUserId());
                     return ArticleResponseDto.fromEntity(article, user);
@@ -41,7 +41,7 @@ public class ArticleQueryService {
         int totalPages = (int) Math.ceil((double) totalCount / size);
         boolean isLast = page >= totalPages;
 
-        return new GetArticlesResponseDto(articleResponseDtos, page, (int) totalCount, totalPages, isLast);
+        return new GetArticlesResponseDto(responses, page, (int) totalCount, totalPages, isLast);
     }
 
     public ArticleResponseDto getArticle(Long articleId) {

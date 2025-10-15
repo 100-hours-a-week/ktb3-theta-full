@@ -60,9 +60,9 @@ public class ArticleRepositoryImpl implements ArticleRepository {
 	public List<Article> findAll(int page, int size) {
 		return articles.values().stream()
 				.filter(article -> article.getDeletedAt() == null)
-				.sorted(Comparator.comparing(Article::getCreatedAt).reversed()) // 최신 순 정렬
+				.sorted(Comparator.comparing(Article::getCreatedAt).reversed())
 				.skip((long) (page - 1) * size)
-				.limit(size) // 현재 페이지 수와 사이즈 기준, 필요한 만큼
+				.limit(size)
 				.collect(Collectors.toList());
 	}
 
@@ -87,5 +87,19 @@ public class ArticleRepositoryImpl implements ArticleRepository {
 		Article article = findById(articleId)
 				.orElseThrow(() -> new IllegalArgumentException("Article not found"));
 		article.setViewCount(article.getViewCount() + 1);
+	}
+
+	@Override
+	public void incrementCommentCount(Long articleId) {
+		Article article = findById(articleId)
+				.orElseThrow(() -> new IllegalArgumentException("Article not found"));
+		article.setCommentCount(article.getCommentCount() + 1);
+	}
+
+	@Override
+	public void decrementCommentCount(Long articleId) {
+		Article article = findById(articleId)
+				.orElseThrow(() -> new IllegalArgumentException("Article not found"));
+		article.setCommentCount(article.getCommentCount() - 1);
 	}
 }

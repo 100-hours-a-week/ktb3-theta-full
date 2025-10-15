@@ -13,4 +13,6 @@ public interface ArticleRepository {
 	void deleteByArticleId(Long userId, Long articleId);
 	long count();
 	void increaseViewCount(Long articleId);
+	void incrementCommentCount(Long articleId);
+	void decrementCommentCount(Long articleId);
 }

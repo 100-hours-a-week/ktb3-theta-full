@@ -54,4 +54,12 @@ public class ArticleCommandService {
 	public void increaseViewCount(Long articleId) {
 		articleRepository.increaseViewCount(articleId);
 	}
+
+	public void incrementCommentCount(Long articleId) {
+		articleRepository.incrementCommentCount(articleId);
+	}
+
+	public void decrementCommentCount(Long articleId) {
+		articleRepository.decrementCommentCount(articleId);
+	}
 }

@@ -22,7 +22,8 @@ public class ArticleRepositoryImpl implements ArticleRepository {
 				.max(Long::compareTo)
 				.orElse(0L) + 1);
 		article.setCreatedAt(LocalDateTime.now());
-		return articles.put(article.getId(), article);
+		articles.put(article.getId(), article);
+		return article;
 	}
 	
 	@Override

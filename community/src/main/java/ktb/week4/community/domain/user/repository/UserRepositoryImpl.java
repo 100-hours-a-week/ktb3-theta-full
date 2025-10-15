@@ -23,7 +23,7 @@ public class UserRepositoryImpl implements UserRepository {
 		user.setCreatedAt(LocalDateTime.now());
 		
 		users.put(user.getId(), user);
-		return users.get(user.getId());
+		return user;
 	}
 	
 	@Override

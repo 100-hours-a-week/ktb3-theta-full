@@ -32,13 +32,16 @@ public class ArticleController {
 		return ApiResponse.onCreateSuccess("article_create_success", articleCommandService.createArticle(userId, request));
 	}
 	
-	@PatchMapping
-	public ApiResponse<ArticleResponseDto> updateArticle(@RequestParam Long userId, @RequestParam Long articleId, @RequestBody @Valid UpdateArticleRequestDto request) {
+	@PatchMapping("/{articleId}")
+	public ApiResponse<ArticleResponseDto> updateArticle(
+			@PathVariable Long articleId,
+			@RequestParam Long userId,
+			@RequestBody @Valid UpdateArticleRequestDto request) {
 		return ApiResponse.onSuccess("article_update_success", articleCommandService.updateArticle(userId, articleId, request));
 	}
 	
-	@DeleteMapping
-	public ResponseEntity<Void> deleteArticle(@RequestParam Long userId, @RequestParam Long articleId) {
+	@DeleteMapping("/{articleId}")
+	public ResponseEntity<Void> deleteArticle(@PathVariable Long articleId, @RequestParam Long userId) {
 		articleCommandService.deleteArticle(userId, articleId);
 		return ApiResponse.onDeleteSuccess();
 	}

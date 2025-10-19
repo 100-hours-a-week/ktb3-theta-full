@@ -3,6 +3,7 @@ package ktb.week4.community.domain.comment.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import ktb.week4.community.domain.comment.dto.CommentResponseDto;
@@ -24,6 +25,7 @@ public class CommentController {
     private final CommentCommandService commentCommandService;
     private final CommentQueryService commentQueryService;
 	
+	@Tag(name = "Comment", description = "댓글 관련 API")
 	@Operation(summary = "특정 게시글의 댓글을 조회합니다.")
     @GetMapping
     public ApiResponse<GetCommentsResponseDto> getComments(
@@ -36,6 +38,7 @@ public class CommentController {
         return ApiResponse.onSuccess("comments_success", commentQueryService.getComments(articleId, page, size));
     }
 	
+	@Tag(name = "Comment", description = "댓글 관련 API")
 	@Operation(summary = "특정 게시글에 댓글을 작성합니다.")
     @PostMapping
     public ApiResponse<CommentResponseDto> createComment(
@@ -45,6 +48,7 @@ public class CommentController {
 		return ApiResponse.onCreateSuccess("comments_create_success", commentCommandService.createComment(userId, articleId, request));
     }
 	
+	@Tag(name = "Comment", description = "댓글 관련 API")
 	@Operation(summary = "특정 댓글을 수정합니다.")
     @PatchMapping("/{commentId}")
     public ApiResponse<CommentResponseDto> updateComment(
@@ -56,6 +60,7 @@ public class CommentController {
         return ApiResponse.onSuccess("comments_update_success", commentCommandService.updateComment(articleId, userId, commentId, request));
     }
 	
+	@Tag(name = "Comment", description = "댓글 관련 API")
 	@Operation(summary = "특정 댓글을 삭제합니다.")
     @DeleteMapping("/{commentId}")
 	@ApiResponses({

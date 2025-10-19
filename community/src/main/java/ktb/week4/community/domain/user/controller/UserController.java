@@ -3,6 +3,7 @@ package ktb.week4.community.domain.user.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import ktb.week4.community.domain.user.dto.*;
 import ktb.week4.community.domain.user.service.UserCommandService;
@@ -19,6 +20,7 @@ public class UserController {
 	private final UserCommandService userCommandService;
 	private final UserQueryService userQueryService;
 	
+	@Tag(name = "User", description = "유저 관련 API")
 	@Operation(summary = "회원가입합니다.")
 	@PostMapping("/users")
 	public ApiResponse<SignUpResponseDto> registerUser(
@@ -26,6 +28,7 @@ public class UserController {
 		return ApiResponse.onCreateSuccess("register_success", userCommandService.createUser(request));
 	}
 	
+	@Tag(name = "User", description = "유저 관련 API")
 	@Operation(summary = "사용자의 정보를 조회합니다.")
 	@GetMapping("/users")
 	public ApiResponse<UserResponseDto> getUser(
@@ -34,6 +37,7 @@ public class UserController {
 		return ApiResponse.onSuccess("user_info_success", userQueryService.getUser(userId));
 	}
 	
+	@Tag(name = "User", description = "유저 관련 API")
 	@Operation(summary = "사용자의 정보를 수정합니다.")
 	@PatchMapping("/users")
 	public ApiResponse<UserResponseDto> updateUser(
@@ -43,6 +47,7 @@ public class UserController {
 		return ApiResponse.onSuccess("user_info_update_success", userCommandService.updateUser(userId, request));
 	}
 	
+	@Tag(name = "User", description = "유저 관련 API")
 	@Operation(summary = "사용자의 비밀번호를 변경합니다.")
 	@PatchMapping("/users/password")
 	public ApiResponse<Void> updatePassword(
@@ -53,6 +58,7 @@ public class UserController {
 		return ApiResponse.onSuccess("password_update_success", null);
 	}
 	
+	@Tag(name = "User", description = "유저 관련 API")
 	@Operation(summary = "사용자를 탈퇴 처리합니다.")
 	@ApiResponses({
 			@io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "204", description = "탈퇴 성공"),
@@ -65,12 +71,14 @@ public class UserController {
 		return ApiResponse.onDeleteSuccess();
 	}
 	
+	@Tag(name = "User", description = "유저 관련 API")
 	@Operation(summary = "로그인합니다.")
 	@PostMapping("/auth/login")
 	public ApiResponse<LoginResponseDto> login(@RequestBody @Valid LoginRequestDto loginRequestDto) {
 		return ApiResponse.onSuccess("login_success", userQueryService.login(loginRequestDto));
 	}
 	
+	@Tag(name = "User", description = "유저 관련 API")
 	@Operation(summary = "로그아웃합니다.")
 	@PostMapping("/auth/logout")
 	@ApiResponses({

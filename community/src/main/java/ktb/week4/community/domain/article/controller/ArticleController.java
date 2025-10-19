@@ -3,6 +3,7 @@ package ktb.week4.community.domain.article.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import ktb.week4.community.domain.article.dto.ArticleResponseDto;
@@ -23,6 +24,7 @@ public class ArticleController {
 	private final ArticleCommandService articleCommandService;
 	private final ArticleQueryService articleQueryService;
 	
+	@Tag(name = "Article", description = "게시글 관련 API")
 	@Operation(summary = "글 작성 시간을 기준으로 하여, 최신 순으로  게시글들을 조회합니다.")
 	@GetMapping
 	public ApiResponse<GetArticlesResponseDto> getArticles(
@@ -33,6 +35,7 @@ public class ArticleController {
 		return ApiResponse.onSuccess("articles_success", articleQueryService.getArticles(page, size));
 	}
 	
+	@Tag(name = "Article", description = "게시글 관련 API")
 	@Operation(summary = "게시글을 생성합니다.")
 	@PostMapping
 	public ApiResponse<ArticleResponseDto> createArticle(
@@ -42,6 +45,7 @@ public class ArticleController {
 		return ApiResponse.onCreateSuccess("article_create_success", articleCommandService.createArticle(userId, request));
 	}
 	
+	@Tag(name = "Article", description = "게시글 관련 API")
 	@Operation(summary = "게시글을 수정합니다.")
 	@PatchMapping("/{articleId}")
 	public ApiResponse<ArticleResponseDto> updateArticle(
@@ -53,6 +57,7 @@ public class ArticleController {
 		return ApiResponse.onSuccess("article_update_success", articleCommandService.updateArticle(userId, articleId, request));
 	}
 	
+	@Tag(name = "Article", description = "게시글 관련 API")
 	@Operation(summary = "게시글을 삭제합니다.")
 	@DeleteMapping("/{articleId}")
 	@ApiResponses({
@@ -67,6 +72,7 @@ public class ArticleController {
 		return ApiResponse.onDeleteSuccess();
 	}
 	
+	@Tag(name = "Article", description = "게시글 관련 API")
 	@Operation(summary = "특정 게시글을 조회합니다.")
 	@GetMapping("/{articleId}")
 	public ApiResponse<ArticleResponseDto> getArticle(

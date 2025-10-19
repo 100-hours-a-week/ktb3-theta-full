@@ -1,7 +1,6 @@
 package ktb.week4.community.domain.article.repository;
 
 import ktb.week4.community.domain.article.entity.Article;
-import ktb.week4.community.domain.user.entity.User;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
@@ -27,7 +26,7 @@ public class ArticleRepositoryImpl implements ArticleRepository {
 	}
 	
 	@Override
-	public Article update(User user, Article oldArticle, Article article) {
+	public Article update(Article oldArticle, Article article) {
 		if (!article.getTitle().isEmpty()) {
 			oldArticle.setTitle(article.getTitle());
 		}

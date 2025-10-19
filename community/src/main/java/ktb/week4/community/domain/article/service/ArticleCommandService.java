@@ -41,7 +41,7 @@ public class ArticleCommandService {
 		Article article = articleRepository.findById(articleId).orElseThrow(() -> new GeneralException(ErrorCode.ARTICLE_NOT_FOUND));
 		if(!Objects.equals(article.getUserId(), userId)) throw new GeneralException(ErrorCode.FORBIDDEN_REQUEST);
 		
-		Article updatedArticle = articleRepository.update(writtenBy, article, Article.create(
+		Article updatedArticle = articleRepository.update(article, Article.create(
 				request.title(),
 				request.content(),
 				request.articleImage(),

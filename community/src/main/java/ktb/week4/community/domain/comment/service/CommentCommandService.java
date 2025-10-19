@@ -1,5 +1,6 @@
 package ktb.week4.community.domain.comment.service;
 
+import ktb.week4.community.domain.article.entity.Article;
 import ktb.week4.community.domain.article.repository.ArticleRepository;
 import ktb.week4.community.domain.article.service.ArticleCommandService;
 import ktb.week4.community.domain.comment.dto.CommentResponseDto;
@@ -26,12 +27,13 @@ public class CommentCommandService {
     public CommentResponseDto createComment(Long userId, Long articleId, CreateCommentRequestDto request) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new GeneralException(ErrorCode.USER_NOT_FOUND));
-        articleRepository.findById(articleId)
+        Article article = articleRepository.findById(articleId)
                 .orElseThrow(() -> new GeneralException(ErrorCode.ARTICLE_NOT_FOUND));
 		
         Comment comment = Comment.create(request.content(), userId, articleId);
         Comment savedComment = commentRepository.save(comment);
 
+		articleRepository.incrementCommentCount(article);
         articleCommandService.incrementCommentCount(articleId);
 
         return CommentResponseDto.fromEntity(savedComment, user);

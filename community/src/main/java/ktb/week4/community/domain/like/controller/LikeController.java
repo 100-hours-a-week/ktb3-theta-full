@@ -1,6 +1,5 @@
 package ktb.week4.community.domain.like.controller;
 
-import io.swagger.v3.oas.annotations.Parameter;
 import ktb.week4.community.domain.like.dto.LikeResponseDto;
 import ktb.week4.community.domain.like.service.LikeCommandService;
 import ktb.week4.community.domain.like.service.LikeQueryService;
@@ -22,9 +21,7 @@ public class LikeController implements LikeApiSpecification {
 	@Override
     @GetMapping
     public ApiResponse<LikeResponseDto> getLikes(
-			@Parameter(description = "좋아요 여부를 확인할 게시글 id", required = true, example = "1")
             @PathVariable Long articleId,
-			@Parameter(description = "좋아요 여부를 확인할 사용자의 id", required = true, example = "1")
             @RequestParam Long userId) {
         return ApiResponse.onSuccess(SuccessCode.SUCCESS, likeQueryService.getLikeStatus(articleId, userId));
     }
@@ -32,9 +29,7 @@ public class LikeController implements LikeApiSpecification {
 	@Override
 	@PostMapping
     public ApiResponse<LikeResponseDto> createLike(
-			@Parameter(description = "좋아요룰 할 게시글 id", required = true, example = "1")
 			@PathVariable Long articleId,
-			@Parameter(description = "좋아요를 할 사용자의 id", required = true, example = "1")
 			@RequestParam Long userId) {
         return ApiResponse.onCreateSuccess(SuccessCode.CREATE_SUCCESS, likeCommandService.likeArticle(articleId, userId));
     }
@@ -42,9 +37,7 @@ public class LikeController implements LikeApiSpecification {
 	@Override
     @DeleteMapping
     public ResponseEntity<Void> deleteLike(
-			@Parameter(description = "좋아요룰 취소할 게시글 id", required = true, example = "1")
             @PathVariable Long articleId,
-			@Parameter(description = "좋아요를 취소할 사용자의 id", required = true, example = "1")
 			@RequestParam Long userId) {
         likeCommandService.unlikeArticle(articleId, userId);
 		return ApiResponse.onDeleteSuccess();

@@ -6,7 +6,7 @@ import ktb.week4.community.domain.article.service.ArticleCommandService;
 import ktb.week4.community.domain.like.dto.LikeResponseDto;
 import ktb.week4.community.domain.like.entity.LikeArticle;
 import ktb.week4.community.domain.like.repository.LikeRepository;
-import ktb.week4.community.global.exception.ErrorCode;
+import ktb.week4.community.global.apiPayload.ErrorCode;
 import ktb.week4.community.global.exception.GeneralException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;

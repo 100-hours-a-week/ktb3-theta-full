@@ -1,5 +1,6 @@
-package ktb.week4.community.global.exception;
+package ktb.week4.community.global.apiPayload;
 
+import ktb.week4.community.global.exception.Reason;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;

@@ -1,6 +1,5 @@
 package ktb.week4.community.domain.article.controller;
 
-import jakarta.validation.Valid;
 import ktb.week4.community.domain.article.dto.ArticleResponseDto;
 import ktb.week4.community.domain.article.dto.CreateArticleRequestDto;
 import ktb.week4.community.domain.article.dto.GetArticlesResponseDto;
@@ -33,7 +32,7 @@ public class ArticleController implements ArticleApiSpecification {
 	@PostMapping
 	public ApiResponse<ArticleResponseDto> createArticle(
 			@RequestParam Long userId,
-			@Valid CreateArticleRequestDto request) {
+			CreateArticleRequestDto request) {
 		return ApiResponse.onCreateSuccess(SuccessCode.CREATE_SUCCESS, articleCommandService.createArticle(userId, request));
 	}
 	
@@ -42,7 +41,7 @@ public class ArticleController implements ArticleApiSpecification {
 	public ApiResponse<ArticleResponseDto> updateArticle(
 			@PathVariable Long articleId,
 			@RequestParam Long userId,
-			@RequestBody @Valid UpdateArticleRequestDto request) {
+			@RequestBody UpdateArticleRequestDto request) {
 		return ApiResponse.onSuccess(SuccessCode.UPDATE_SUCCESS, articleCommandService.updateArticle(userId, articleId, request));
 	}
 	

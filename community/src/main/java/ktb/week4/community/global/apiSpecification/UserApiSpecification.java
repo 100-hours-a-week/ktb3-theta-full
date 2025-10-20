@@ -8,14 +8,12 @@ import jakarta.validation.Valid;
 import ktb.week4.community.domain.user.dto.*;
 import ktb.week4.community.global.apiPayload.ApiResponse;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
 
 @Tag(name = "User", description = "유저 관련 API")
 public interface UserApiSpecification {
 	
 	@Operation(summary = "회원가입합니다.")
-	ApiResponse<SignUpResponseDto> registerUser(
-			SignUpRequestDto request);
+	ApiResponse<SignUpResponseDto> registerUser(@Valid SignUpRequestDto request);
 	
 	@Operation(summary = "사용자의 정보를 조회합니다.")
 	ApiResponse<UserResponseDto> getUser(
@@ -29,7 +27,7 @@ public interface UserApiSpecification {
 	@Operation(summary = "사용자의 비밀번호를 변경합니다.")
 	ApiResponse<Void> updatePassword(
 			@Parameter(description = "비밀번호를 변경할 사용자의 id", required = true, example = "1") Long userId,
-			UpdatePasswordRequestDto request);
+			@Valid UpdatePasswordRequestDto request);
 	
 	@Operation(summary = "사용자를 탈퇴 처리합니다.")
 	@ApiResponses({
@@ -39,7 +37,7 @@ public interface UserApiSpecification {
 			@Parameter(description = "탈퇴 처리를 진행할 사용자의 id", required = true, example = "1") Long userId);
 	
 	@Operation(summary = "로그인합니다.")
-	ApiResponse<LoginResponseDto> login(@RequestBody @Valid LoginRequestDto loginRequestDto);
+	ApiResponse<LoginResponseDto> login(@Valid LoginRequestDto loginRequestDto);
 	
 	@Operation(summary = "로그아웃합니다.")
 	@ApiResponses({

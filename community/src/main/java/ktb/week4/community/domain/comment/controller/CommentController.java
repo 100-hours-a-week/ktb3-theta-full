@@ -1,6 +1,5 @@
 package ktb.week4.community.domain.comment.controller;
 
-import jakarta.validation.Valid;
 import ktb.week4.community.domain.comment.dto.CommentResponseDto;
 import ktb.week4.community.domain.comment.dto.CreateCommentRequestDto;
 import ktb.week4.community.domain.comment.dto.GetCommentsResponseDto;
@@ -35,7 +34,7 @@ public class CommentController implements CommentApiSpecification {
 	@PostMapping
 	public ApiResponse<CommentResponseDto> createComment(
 			@PathVariable Long articleId, @RequestParam Long userId,
-			@RequestBody @Valid CreateCommentRequestDto request) {
+			@RequestBody CreateCommentRequestDto request) {
 		return ApiResponse.onCreateSuccess(SuccessCode.CREATE_SUCCESS, commentCommandService.createComment(userId, articleId, request));
 	}
 	
@@ -44,7 +43,7 @@ public class CommentController implements CommentApiSpecification {
 	public ApiResponse<CommentResponseDto> updateComment(
 			@PathVariable Long articleId,
 			@PathVariable Long commentId, @RequestParam Long userId,
-			@RequestBody @Valid UpdateCommentRequestDto request) {
+			@RequestBody UpdateCommentRequestDto request) {
 		return ApiResponse.onSuccess(SuccessCode.UPDATE_SUCCESS, commentCommandService.updateComment(articleId, userId, commentId, request));
 	}
 	

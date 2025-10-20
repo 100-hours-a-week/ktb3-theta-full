@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import ktb.week4.community.domain.article.dto.ArticleResponseDto;
 import ktb.week4.community.domain.article.dto.CreateArticleRequestDto;
@@ -24,13 +25,13 @@ public interface ArticleApiSpecification {
 	ApiResponse<ArticleResponseDto> createArticle(
 			@Parameter(description = "게시글을 생성하는 유저의 id", required = true, example = "1")
 			Long userId,
-			CreateArticleRequestDto request);
+			@Valid CreateArticleRequestDto request);
 	
 	@Operation(summary = "게시글을 수정합니다.")
 	ApiResponse<ArticleResponseDto> updateArticle(
 			@Parameter(description = "수정하고자 하는 게시글의 id", required = true, example = "1") Long articleId,
 			@Parameter(description = "게시글을 수정하는 유저의 id", required = true, example = "1") Long userId,
-			UpdateArticleRequestDto request);
+			@Valid UpdateArticleRequestDto request);
 	
 	@Operation(summary = "게시글을 삭제합니다.")
 	@ApiResponses({

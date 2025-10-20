@@ -21,12 +21,12 @@ public class ApiResponse<T> {
 	@JsonInclude(JsonInclude.Include.NON_NULL)
 	private T result;
 	
-	public static <T> ApiResponse<T> onSuccess(String message, T result){
-		return new ApiResponse<>(true, "200", message, result);
+	public static <T> ApiResponse<T> onSuccess(SuccessCode code, T result){
+		return new ApiResponse<>(true, code.getReason().code(), code.getReason().message(), result);
 	}
 	
-	public static <T> ApiResponse<T> onCreateSuccess(String message, T result){
-		return new ApiResponse<>(true, "201", message, result);
+	public static <T> ApiResponse<T> onCreateSuccess(SuccessCode code, T result){
+		return new ApiResponse<>(true, code.getReason().code(), code.getReason().message(), result);
 	}
 	
 	public static ResponseEntity<Void> onDeleteSuccess() {

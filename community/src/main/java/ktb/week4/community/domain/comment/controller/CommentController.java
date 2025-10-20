@@ -10,6 +10,7 @@ import ktb.week4.community.domain.comment.dto.UpdateCommentRequestDto;
 import ktb.week4.community.domain.comment.service.CommentCommandService;
 import ktb.week4.community.domain.comment.service.CommentQueryService;
 import ktb.week4.community.global.apiPayload.ApiResponse;
+import ktb.week4.community.global.apiPayload.SuccessCode;
 import ktb.week4.community.global.apiSpecification.CommentApiSpecification;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +33,7 @@ public class CommentController implements CommentApiSpecification {
             @RequestParam(name = "page")  @Min(value = 1, message = "Page parameter must be at least 1") int page,
 			@Parameter(description = "조회할 댓글의 페이지 당 사이즈", required = true, example = "7")
             @RequestParam(name = "size", defaultValue = "7") @Min(value = 1, message = "Size parameter must be at least 1") int size) {
-        return ApiResponse.onSuccess("comments_success", commentQueryService.getComments(articleId, page, size));
+        return ApiResponse.onSuccess(SuccessCode.SUCCESS, commentQueryService.getComments(articleId, page, size));
     }
 	
 	@Override
@@ -41,7 +42,7 @@ public class CommentController implements CommentApiSpecification {
 			@Parameter(description = "댓글을 조회할 게시글의 id", required = true, example = "1")
 			@PathVariable Long articleId, @RequestParam Long userId,
 			@RequestBody @Valid CreateCommentRequestDto request) {
-		return ApiResponse.onCreateSuccess("comments_create_success", commentCommandService.createComment(userId, articleId, request));
+		return ApiResponse.onCreateSuccess(SuccessCode.CREATE_SUCCESS, commentCommandService.createComment(userId, articleId, request));
     }
 	
 	@Override
@@ -52,7 +53,7 @@ public class CommentController implements CommentApiSpecification {
 			@Parameter(description = "수정할 댓글의 id", required = true, example = "1")
 			@PathVariable Long commentId, @RequestParam Long userId,
 			@RequestBody @Valid UpdateCommentRequestDto request) {
-        return ApiResponse.onSuccess("comments_update_success", commentCommandService.updateComment(articleId, userId, commentId, request));
+        return ApiResponse.onSuccess(SuccessCode.UPDATE_SUCCESS, commentCommandService.updateComment(articleId, userId, commentId, request));
     }
 	
 	@Override

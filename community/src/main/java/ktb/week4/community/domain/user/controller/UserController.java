@@ -6,6 +6,7 @@ import ktb.week4.community.domain.user.dto.*;
 import ktb.week4.community.domain.user.service.UserCommandService;
 import ktb.week4.community.domain.user.service.UserQueryService;
 import ktb.week4.community.global.apiPayload.ApiResponse;
+import ktb.week4.community.global.apiPayload.SuccessCode;
 import ktb.week4.community.global.apiSpecification.UserApiSpecification;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +23,7 @@ public class UserController implements UserApiSpecification {
 	@PostMapping("/users")
 	public ApiResponse<SignUpResponseDto> registerUser(
 			@RequestBody @Valid SignUpRequestDto request) {
-		return ApiResponse.onCreateSuccess("register_success", userCommandService.createUser(request));
+		return ApiResponse.onCreateSuccess(SuccessCode.CREATE_SUCCESS, userCommandService.createUser(request));
 	}
 	
 	@Override
@@ -30,7 +31,7 @@ public class UserController implements UserApiSpecification {
 	public ApiResponse<UserResponseDto> getUser(
 			@Parameter(description = "정보를 조회할 사용자의 id", required = true, example = "1")
 			@RequestParam Long userId) {
-		return ApiResponse.onSuccess("user_info_success", userQueryService.getUser(userId));
+		return ApiResponse.onSuccess(SuccessCode.SUCCESS, userQueryService.getUser(userId));
 	}
 	
 	@Override
@@ -39,7 +40,7 @@ public class UserController implements UserApiSpecification {
 			@Parameter(description = "정보를 수정할 사용자의 id", required = true, example = "1")
 			@RequestParam Long userId,
 			@RequestBody UpdateUserRequestDto request) {
-		return ApiResponse.onSuccess("user_info_update_success", userCommandService.updateUser(userId, request));
+		return ApiResponse.onSuccess(SuccessCode.UPDATE_SUCCESS, userCommandService.updateUser(userId, request));
 	}
 	
 	@Override
@@ -49,7 +50,7 @@ public class UserController implements UserApiSpecification {
 			@RequestParam Long userId,
 			@RequestBody @Valid UpdatePasswordRequestDto request) {
 		userCommandService.updatePassword(userId, request);
-		return ApiResponse.onSuccess("password_update_success", null);
+		return ApiResponse.onSuccess(SuccessCode.UPDATE_SUCCESS, null);
 	}
 	
 	@Override
@@ -64,7 +65,7 @@ public class UserController implements UserApiSpecification {
 	@Override
 	@PostMapping("/auth/login")
 	public ApiResponse<LoginResponseDto> login(@RequestBody @Valid LoginRequestDto loginRequestDto) {
-		return ApiResponse.onSuccess("login_success", userQueryService.login(loginRequestDto));
+		return ApiResponse.onSuccess(SuccessCode.SUCCESS, userQueryService.login(loginRequestDto));
 	}
 	
 	@Override

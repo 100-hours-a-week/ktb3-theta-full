@@ -5,6 +5,7 @@ import ktb.week4.community.domain.like.dto.LikeResponseDto;
 import ktb.week4.community.domain.like.service.LikeCommandService;
 import ktb.week4.community.domain.like.service.LikeQueryService;
 import ktb.week4.community.global.apiPayload.ApiResponse;
+import ktb.week4.community.global.apiPayload.SuccessCode;
 import ktb.week4.community.global.apiSpecification.LikeApiSpecification;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +26,7 @@ public class LikeController implements LikeApiSpecification {
             @PathVariable Long articleId,
 			@Parameter(description = "좋아요 여부를 확인할 사용자의 id", required = true, example = "1")
             @RequestParam Long userId) {
-        return ApiResponse.onSuccess("article_like_success", likeQueryService.getLikeStatus(articleId, userId));
+        return ApiResponse.onSuccess(SuccessCode.SUCCESS, likeQueryService.getLikeStatus(articleId, userId));
     }
 	
 	@Override
@@ -35,7 +36,7 @@ public class LikeController implements LikeApiSpecification {
 			@PathVariable Long articleId,
 			@Parameter(description = "좋아요를 할 사용자의 id", required = true, example = "1")
 			@RequestParam Long userId) {
-        return ApiResponse.onCreateSuccess("article_like_success", likeCommandService.likeArticle(articleId, userId));
+        return ApiResponse.onCreateSuccess(SuccessCode.CREATE_SUCCESS, likeCommandService.likeArticle(articleId, userId));
     }
 	
 	@Override

@@ -10,6 +10,7 @@ import ktb.week4.community.domain.article.dto.UpdateArticleRequestDto;
 import ktb.week4.community.domain.article.service.ArticleCommandService;
 import ktb.week4.community.domain.article.service.ArticleQueryService;
 import ktb.week4.community.global.apiPayload.ApiResponse;
+import ktb.week4.community.global.apiPayload.SuccessCode;
 import ktb.week4.community.global.apiSpecification.ArticleApiSpecification;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +30,7 @@ public class ArticleController implements ArticleApiSpecification {
 			@RequestParam(name = "page") @Min(value = 1, message = "Page parameter must be at least 1") int page,
 			@Parameter(description = "조회할 게시글의 페이지 당 사이즈", required = true, example = "7")
 			@RequestParam(name = "size", defaultValue = "7") @Min(value = 1, message = "Size parameter must be at least 1") int size) {
-		return ApiResponse.onSuccess("articles_success", articleQueryService.getArticles(page, size));
+		return ApiResponse.onSuccess(SuccessCode.SUCCESS, articleQueryService.getArticles(page, size));
 	}
 	
 	@Override
@@ -38,7 +39,7 @@ public class ArticleController implements ArticleApiSpecification {
 			@Parameter(description = "게시글을 생성하는 유저의 id", required = true, example = "1")
 			@RequestParam Long userId,
 			@RequestBody @Valid CreateArticleRequestDto request) {
-		return ApiResponse.onCreateSuccess("article_create_success", articleCommandService.createArticle(userId, request));
+		return ApiResponse.onCreateSuccess(SuccessCode.CREATE_SUCCESS, articleCommandService.createArticle(userId, request));
 	}
 	
 	@Override
@@ -49,7 +50,7 @@ public class ArticleController implements ArticleApiSpecification {
 			@Parameter(description = "게시글을 수정하는 유저의 id", required = true, example = "1")
 			@RequestParam Long userId,
 			@RequestBody @Valid UpdateArticleRequestDto request) {
-		return ApiResponse.onSuccess("article_update_success", articleCommandService.updateArticle(userId, articleId, request));
+		return ApiResponse.onSuccess(SuccessCode.UPDATE_SUCCESS, articleCommandService.updateArticle(userId, articleId, request));
 	}
 	
 	@Override
@@ -70,6 +71,6 @@ public class ArticleController implements ArticleApiSpecification {
 			@PathVariable Long articleId
 	) {
 		articleCommandService.increaseViewCount(articleId);
-		return ApiResponse.onSuccess("article_success", articleQueryService.getArticle(articleId));
+		return ApiResponse.onSuccess(SuccessCode.SUCCESS, articleQueryService.getArticle(articleId));
 	}
 }

@@ -51,7 +51,7 @@ public class CommentCommandService {
 		}
 
         comment.setContent(request.content());
-        Comment updatedComment = commentRepository.update(comment);
+        Comment updatedComment = commentRepository.update(commentId, comment);
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new GeneralException(ErrorCode.USER_NOT_FOUND));

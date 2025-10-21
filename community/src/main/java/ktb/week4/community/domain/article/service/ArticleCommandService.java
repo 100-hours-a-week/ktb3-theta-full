@@ -41,13 +41,17 @@ public class ArticleCommandService {
 		Article article = articleRepository.findById(articleId).orElseThrow(() -> new GeneralException(ErrorCode.ARTICLE_NOT_FOUND));
 		if(!Objects.equals(article.getUserId(), userId)) throw new GeneralException(ErrorCode.FORBIDDEN_REQUEST);
 		
-		Article updatedArticle = articleRepository.update(article, Article.create(
-				request.title(),
-				request.content(),
-				request.articleImage(),
-				userId
-		));
+		if(!request.title().isEmpty()) {
+			article.setTitle(request.title());
+		}
+		if(!request.content().isEmpty()) {
+			article.setContent(request.content());
+		}
+		if(!request.articleImage().isEmpty()) {
+			article.setArticleImage(request.articleImage());
+		}
 		
+		Article updatedArticle = articleRepository.update(articleId, article);
 		return ArticleResponseDto.fromEntity(updatedArticle, writtenBy);
 	}
 	

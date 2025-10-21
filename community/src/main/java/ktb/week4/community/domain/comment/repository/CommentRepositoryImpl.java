@@ -48,9 +48,9 @@ public class CommentRepositoryImpl implements CommentRepository {
 	}
 	
 	@Override
-	public Comment update(Comment comment) {
+	public Comment update(Long commentId, Comment comment) {
 		comment.setUpdatedAt(LocalDateTime.now());
-		comments.put(comment.getId(), comment);
+		comments.put(commentId, comment);
 		return comment;
 	}
 	

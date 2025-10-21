@@ -14,7 +14,7 @@ public interface CommentRepository {
 
     long countByArticleId(Long articleId);
 
-    Comment update(Comment comment);
+    Comment update(Long commentId, Comment comment);
 
     void delete(Long commentId);
 }

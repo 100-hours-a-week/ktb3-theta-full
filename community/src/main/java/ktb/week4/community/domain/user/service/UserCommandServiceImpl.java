@@ -32,13 +32,15 @@ public class UserCommandServiceImpl implements UserCommandService {
 	
 	@Override
 	public UserResponseDto updateUser(Long userId, UpdateUserRequestDto request) {
-		User newUser = User.create(
-				request.nickname(),
-				null, null,
-				request.profileImage()
-		);
+		User user = validateUserExists(userId);
+		if(!request.nickname().isEmpty()) {
+			user.setNickname(request.nickname());
+		}
+		if(!request.profileImage().isEmpty()) {
+			user.setProfileImage(request.profileImage());
+		}
 
-		return UserResponseDto.fromEntity(userRepository.update(validateUserExists(userId), newUser));
+		return UserResponseDto.fromEntity(userRepository.update(userId, user));
 	}
 	
 	@Override

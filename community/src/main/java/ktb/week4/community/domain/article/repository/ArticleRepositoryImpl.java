@@ -26,19 +26,9 @@ public class ArticleRepositoryImpl implements ArticleRepository {
 	}
 	
 	@Override
-	public Article update(Article oldArticle, Article article) {
-		if (!article.getTitle().isEmpty()) {
-			oldArticle.setTitle(article.getTitle());
-		}
-		if (!article.getContent().isEmpty()) {
-			oldArticle.setContent(article.getContent());
-		}
-		if (article.getArticleImage() != null && !article.getArticleImage().isEmpty()) {
-			oldArticle.setArticleImage(article.getArticleImage());
-		}
-		
-		oldArticle.setUpdatedAt(LocalDateTime.now());
-		return oldArticle;
+	public Article update(Long articleId, Article article) {
+		article.setUpdatedAt(LocalDateTime.now());
+		return articles.put(articleId, article);
 	}
 	
 	@Override

@@ -8,7 +8,7 @@ import java.util.Optional;
 public interface UserRepository {
 	User save(User user);
 	
-	User update(User oldUser, User user);
+	User update(Long userId, User user);
 	
 	void deleteById(User user);
 	

@@ -27,17 +27,9 @@ public class UserRepositoryImpl implements UserRepository {
 	}
 	
 	@Override
-	public User update(User oldUser, User user) {
-		if(!user.getNickname().isEmpty()) {
-			oldUser.setNickname(user.getNickname());
-		}
-		
-		if(user.getProfileImage() != null && !user.getProfileImage().isEmpty()) {
-			oldUser.setProfileImage(user.getProfileImage());
-		}
-		
-		oldUser.setUpdatedAt(LocalDateTime.now());
-		return oldUser;
+	public User update(Long userId, User user) {
+		user.setUpdatedAt(LocalDateTime.now());
+		return users.put(userId, user);
 	}
 	
 	@Override

@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface ArticleRepository {
 	Article save(Article article);
-	Article update(Article oldArticle, Article article);
+	Article update(Long articleId, Article article);
 	Optional<Article> findById(Long articleId);
 	List<Article> findAll(int page, int size);
 	void deleteByArticleId(Article article);

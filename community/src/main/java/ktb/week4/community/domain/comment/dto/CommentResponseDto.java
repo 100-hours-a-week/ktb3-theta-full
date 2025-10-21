@@ -22,4 +22,13 @@ public record CommentResponseDto(
                 WrittenByResponseDto.fromEntity(user)
         );
     }
+	
+	public static CommentResponseDto fromEntity(Comment comment) {
+		return new CommentResponseDto(
+				comment.getId(),
+				comment.getContent(),
+				comment.getCreatedAt(),
+				WrittenByResponseDto.emptyWrittenByDto()
+		);
+	}
 }

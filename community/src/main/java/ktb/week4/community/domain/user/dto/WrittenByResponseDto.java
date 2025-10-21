@@ -13,6 +13,14 @@ public record WrittenByResponseDto (
 		String profileImage
 ) {
 	
+	public static WrittenByResponseDto emptyWrittenByDto() {
+		return new WrittenByResponseDto(
+				0L,
+				"삭제된 이용자",
+				null
+		);
+	}
+	
 	public static WrittenByResponseDto fromEntity(User user) {
 		return new WrittenByResponseDto(
 				user.getId(),

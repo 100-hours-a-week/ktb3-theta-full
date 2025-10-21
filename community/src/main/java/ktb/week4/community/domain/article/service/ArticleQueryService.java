@@ -7,20 +7,17 @@ import ktb.week4.community.domain.article.repository.ArticleRepository;
 import ktb.week4.community.domain.user.entity.User;
 import ktb.week4.community.domain.article.loader.ArticleLoader;
 import ktb.week4.community.domain.user.loader.UserLoader;
-import ktb.week4.community.domain.user.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
 public class ArticleQueryService {
     private final ArticleRepository articleRepository;
-	private final UserRepository userRepository;
 	private final UserLoader userLoader;
 	private final ArticleLoader articleLoader;
 
@@ -31,12 +28,14 @@ public class ArticleQueryService {
                 .distinct()
                 .toList();
 		
-		Map<Long, User> userMap = userRepository.findByIds(userIds).stream()
-				.collect(Collectors.toMap(User::getId, Function.identity()));
+		Map<Long, User> userMap = userLoader.getUsersByIds(userIds);
 		
 		List<ArticleResponseDto> responses = articles.stream()
                 .map(article -> {
-                    User user = userMap.get(article.getUserId());
+					User user = userMap.get(article.getUserId());
+					if(user == null) {
+						return ArticleResponseDto.fromEntity(article);
+					}
                     return ArticleResponseDto.fromEntity(article, user);
                 })
                 .collect(Collectors.toList());

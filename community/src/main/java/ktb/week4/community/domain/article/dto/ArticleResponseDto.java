@@ -25,4 +25,9 @@ public record ArticleResponseDto(
 		return new ArticleResponseDto(article.getId(), article.getTitle(), article.getLikeCount(), article.getCommentCount(), article.getViewCount(), article.getCreatedAt(),
 				WrittenByResponseDto.fromEntity(user));
 	}
+	
+	public static ArticleResponseDto fromEntity(Article article) {
+		return new ArticleResponseDto(article.getId(), article.getTitle(), article.getLikeCount(), article.getCommentCount(), article.getViewCount(), article.getCreatedAt(),
+				WrittenByResponseDto.emptyWrittenByDto());
+	}
 }

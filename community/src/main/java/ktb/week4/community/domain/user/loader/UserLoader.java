@@ -7,6 +7,11 @@ import ktb.week4.community.global.exception.GeneralException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
 @Component
 @AllArgsConstructor
 public class UserLoader {
@@ -18,6 +23,11 @@ public class UserLoader {
 	
 	public User getUserByEmail(String email) {
 		return userRepository.findByEmail(email).orElseThrow(() -> new GeneralException(ErrorCode._BAD_REQUEST));
+	}
+
+	public Map<Long, User> getUsersByIds(List<Long> userIds) {
+		return userRepository.findByIds(userIds).stream()
+				.collect(Collectors.toMap(User::getId, Function.identity()));
 	}
 	
 }

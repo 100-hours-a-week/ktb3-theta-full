@@ -8,18 +8,18 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
 @Repository
 public class ArticleRepositoryImpl implements ArticleRepository {
 	
 	private final ConcurrentHashMap<Long, Article> articles = new ConcurrentHashMap<>();
+	private final AtomicLong sequence = new AtomicLong(1L);
 	
 	@Override
 	public Article save(Article article) {
-		article.setId(articles.keySet().stream()
-				.max(Long::compareTo)
-				.orElse(0L) + 1);
+		article.setId(sequence.getAndIncrement());
 		article.setCreatedAt(LocalDateTime.now());
 		articles.put(article.getId(), article);
 		return article;

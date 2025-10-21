@@ -6,17 +6,17 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicLong;
 
 @Repository
 public class LikeRepositoryImpl implements LikeRepository {
 
     private final ConcurrentHashMap<Long, LikeArticle> likes = new ConcurrentHashMap<>();
-
-    @Override
+	private final AtomicLong sequence = new AtomicLong(1L);
+	
+	@Override
     public LikeArticle save(LikeArticle likeArticle) {
-        likeArticle.setId(likes.keySet().stream()
-                .max(Long::compareTo)
-                .orElse(0L) + 1);
+        likeArticle.setId(sequence.getAndIncrement());
         likeArticle.setCreatedAt(LocalDateTime.now());
         likes.put(likeArticle.getId(), likeArticle);
         return likeArticle;

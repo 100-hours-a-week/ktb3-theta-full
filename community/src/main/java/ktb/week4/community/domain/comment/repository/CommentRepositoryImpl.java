@@ -8,18 +8,18 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
 @Repository
 public class CommentRepositoryImpl implements CommentRepository {
 	
 	private final ConcurrentHashMap<Long, Comment> comments = new ConcurrentHashMap<>();
+	private final AtomicLong sequence = new AtomicLong(1L);
 	
 	@Override
 	public Comment save(Comment comment) {
-		comment.setId(comments.keySet().stream()
-				.max(Long::compareTo)
-				.orElse(0L) + 1);
+		comment.setId(sequence.getAndIncrement());
 		comment.setCreatedAt(LocalDateTime.now());
 		comments.put(comment.getId(), comment);
 		return comment;

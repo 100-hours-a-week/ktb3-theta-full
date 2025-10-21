@@ -7,19 +7,19 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
 @Repository
 public class UserRepositoryImpl implements UserRepository {
 	
 	private final ConcurrentHashMap<Long, User> users = new ConcurrentHashMap<>();
+	private final AtomicLong sequence = new AtomicLong(1L);
 	
 	@Override
 	public User save(User user) {
 		// ID  및 생성 시간 설정
-		user.setId(users.keySet().stream()
-				.max(Long::compareTo)
-				.orElse(0L) + 1);
+		user.setId(sequence.getAndIncrement());
 		user.setCreatedAt(LocalDateTime.now());
 		
 		users.put(user.getId(), user);

@@ -51,8 +51,8 @@ public class ArticleRepositoryImpl implements ArticleRepository {
 	}
 	
 	@Override
-	public void deleteByArticleId(Article article) {
-		article.setDeletedAt(LocalDateTime.now());
+	public void deleteByArticleId(Long articleId) {
+		articles.get(articleId).setDeletedAt(LocalDateTime.now());
 	}
 	
 	@Override

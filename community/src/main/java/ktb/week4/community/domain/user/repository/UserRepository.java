@@ -10,7 +10,7 @@ public interface UserRepository {
 	
 	User update(Long userId, User user);
 	
-	void deleteById(User user);
+	void deleteById(Long userId);
 	
 	void updatePassword(User user, String password);
 	

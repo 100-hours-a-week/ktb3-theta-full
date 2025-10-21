@@ -59,7 +59,6 @@ public class ArticleController implements ArticleApiSpecification {
 	public ApiResponse<ArticleResponseDto> getArticle(
 			@PathVariable Long articleId
 	) {
-		articleCommandService.increaseViewCount(articleId);
 		return ApiResponse.onSuccess(SuccessCode.SUCCESS, articleQueryService.getArticle(articleId));
 	}
 }

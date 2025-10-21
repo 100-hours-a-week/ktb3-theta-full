@@ -4,25 +4,25 @@ import ktb.week4.community.domain.article.dto.ArticleResponseDto;
 import ktb.week4.community.domain.article.dto.CreateArticleRequestDto;
 import ktb.week4.community.domain.article.dto.UpdateArticleRequestDto;
 import ktb.week4.community.domain.article.entity.Article;
+import ktb.week4.community.domain.article.policy.ArticlePolicy;
 import ktb.week4.community.domain.article.repository.ArticleRepository;
 import ktb.week4.community.domain.user.entity.User;
-import ktb.week4.community.domain.user.repository.UserRepository;
-import ktb.week4.community.global.apiPayload.ErrorCode;
-import ktb.week4.community.global.exception.GeneralException;
+import ktb.week4.community.domain.article.loader.ArticleLoader;
+import ktb.week4.community.domain.user.loader.UserLoader;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.Objects;
 
 @Service
 @AllArgsConstructor
 public class ArticleCommandService {
 	
 	private final ArticleRepository articleRepository;
-	private final UserRepository userRepository;
+	private final UserLoader userLoader;
+	private final ArticleLoader articleLoader;
+	private final ArticlePolicy articlePolicy;
 	
 	public ArticleResponseDto createArticle(Long userId, CreateArticleRequestDto request) {
-		User writtenBy = userRepository.findById(userId).orElseThrow(() -> new GeneralException(ErrorCode.USER_NOT_FOUND));
+		User writtenBy = userLoader.getUserById(userId);
 		
 		Article article = articleRepository.save(
 				Article.create(
@@ -37,9 +37,10 @@ public class ArticleCommandService {
 	}
 	
 	public ArticleResponseDto updateArticle(Long userId, Long articleId, UpdateArticleRequestDto request) {
-		User writtenBy = userRepository.findById(userId).orElseThrow(() -> new GeneralException(ErrorCode.USER_NOT_FOUND));
-		Article article = articleRepository.findById(articleId).orElseThrow(() -> new GeneralException(ErrorCode.ARTICLE_NOT_FOUND));
-		if(!Objects.equals(article.getUserId(), userId)) throw new GeneralException(ErrorCode.FORBIDDEN_REQUEST);
+		User writtenBy = userLoader.getUserById(userId);
+		Article article = articleLoader.getArticleById(articleId);
+		
+		articlePolicy.checkWrittenBy(article, userId);
 		
 		if(!request.title().isEmpty()) {
 			article.setTitle(request.title());
@@ -56,36 +57,9 @@ public class ArticleCommandService {
 	}
 	
 	public void deleteArticle(Long userId, Long articleId) {
-		userRepository.findById(userId).orElseThrow(() -> new GeneralException(ErrorCode.USER_NOT_FOUND));
-		Article article = articleRepository.findById(articleId).orElseThrow(() -> new GeneralException(ErrorCode.ARTICLE_NOT_FOUND));
-		if(!article.getUserId().equals(userId)) {
-			throw new GeneralException(ErrorCode.FORBIDDEN_REQUEST);
-		}
+		Article article = articleLoader.getArticleById(articleId);
+		articlePolicy.checkWrittenBy(article, userId);
 		
-		articleRepository.deleteByArticleId(article);
-	}
-
-	public void increaseViewCount(Long articleId) {
-		articleRepository.increaseViewCount(validateArticleExists(articleId));
-	}
-
-	public void incrementCommentCount(Long articleId) {
-		articleRepository.incrementCommentCount(validateArticleExists(articleId));
-	}
-
-	public void decrementCommentCount(Long articleId) {
-		articleRepository.decrementCommentCount(validateArticleExists(articleId));
-	}
-
-	public void incrementLikeCount(Long articleId) {
-		articleRepository.incrementLikeCount(validateArticleExists(articleId));
-	}
-
-	public void decrementLikeCount(Long articleId) {
-		articleRepository.decrementLikeCount(validateArticleExists(articleId));
-	}
-	
-	private Article validateArticleExists(Long articleId) {
-		return articleRepository.findById(articleId).orElseThrow(() -> new GeneralException(ErrorCode.ARTICLE_NOT_FOUND));
+		articleRepository.deleteByArticleId(articleId);
 	}
 }

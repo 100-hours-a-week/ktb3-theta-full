@@ -1,14 +1,12 @@
 package ktb.week4.community.domain.comment.service;
 
-import ktb.week4.community.domain.article.repository.ArticleRepository;
+import ktb.week4.community.domain.article.loader.ArticleLoader;
 import ktb.week4.community.domain.comment.dto.CommentResponseDto;
 import ktb.week4.community.domain.comment.dto.GetCommentsResponseDto;
 import ktb.week4.community.domain.comment.entity.Comment;
 import ktb.week4.community.domain.comment.repository.CommentRepository;
 import ktb.week4.community.domain.user.entity.User;
 import ktb.week4.community.domain.user.repository.UserRepository;
-import ktb.week4.community.global.apiPayload.ErrorCode;
-import ktb.week4.community.global.exception.GeneralException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,23 +20,22 @@ import java.util.stream.Collectors;
 public class CommentQueryService {
 
     private final CommentRepository commentRepository;
-    private final ArticleRepository articleRepository;
-    private final UserRepository userRepository;
+	private final UserRepository userRepository;
+	private final ArticleLoader articleLoader;
 
     public GetCommentsResponseDto getComments(Long articleId, int page, int size) {
-        articleRepository.findById(articleId)
-                .orElseThrow(() -> new GeneralException(ErrorCode.ARTICLE_NOT_FOUND));
-
+		articleLoader.getArticleById(articleId);
+		
         List<Comment> comments = commentRepository.findAllByArticleId(articleId, page, size);
         long totalCount = commentRepository.countByArticleId(articleId);
 
         List<Long> userIds = comments.stream()
                 .map(Comment::getUserId)
                 .distinct()
-                .collect(Collectors.toList());
-
-        Map<Long, User> userMap = userRepository.findByIds(userIds).stream()
-                .collect(Collectors.toMap(User::getId, Function.identity()));
+                .toList();
+		
+		Map<Long, User> userMap = userRepository.findByIds(userIds).stream()
+				.collect(Collectors.toMap(User::getId, Function.identity()));
 
         List<CommentResponseDto> responses = comments.stream()
                 .map(comment -> {

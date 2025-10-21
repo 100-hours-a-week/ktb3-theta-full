@@ -39,8 +39,8 @@ public class UserRepositoryImpl implements UserRepository {
 	}
 	
 	@Override
-	public void deleteById(User user) {
-		user.setDeletedAt(LocalDateTime.now());
+	public void deleteById(Long userId) {
+		users.get(userId).setDeletedAt(LocalDateTime.now());
 	}
 	
 	@Override

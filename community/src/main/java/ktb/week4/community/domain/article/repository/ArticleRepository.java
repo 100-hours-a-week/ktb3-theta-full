@@ -10,7 +10,7 @@ public interface ArticleRepository {
 	Article update(Long articleId, Article article);
 	Optional<Article> findById(Long articleId);
 	List<Article> findAll(int page, int size);
-	void deleteByArticleId(Article article);
+	void deleteByArticleId(Long articleId);
 	long count();
 	void increaseViewCount(Article article);
 	void incrementCommentCount(Article article);

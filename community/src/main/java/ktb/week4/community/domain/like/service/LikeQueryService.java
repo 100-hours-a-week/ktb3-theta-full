@@ -1,11 +1,9 @@
 package ktb.week4.community.domain.like.service;
 
 import ktb.week4.community.domain.article.entity.Article;
-import ktb.week4.community.domain.article.repository.ArticleRepository;
 import ktb.week4.community.domain.like.dto.LikeResponseDto;
 import ktb.week4.community.domain.like.repository.LikeRepository;
-import ktb.week4.community.global.apiPayload.ErrorCode;
-import ktb.week4.community.global.exception.GeneralException;
+import ktb.week4.community.domain.article.loader.ArticleLoader;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,11 +12,10 @@ import org.springframework.stereotype.Service;
 public class LikeQueryService {
 
     private final LikeRepository likeRepository;
-    private final ArticleRepository articleRepository;
+	private final ArticleLoader articleLoader;
 
     public LikeResponseDto getLikeStatus(Long articleId, Long userId) {
-        Article article = articleRepository.findById(articleId)
-                .orElseThrow(() -> new GeneralException(ErrorCode.ARTICLE_NOT_FOUND));
+        Article article = articleLoader.getArticleById(articleId);
 
         boolean isLiked = likeRepository.existsByUserIdAndArticleId(userId, articleId);
 

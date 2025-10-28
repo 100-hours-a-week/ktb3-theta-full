@@ -1,5 +1,6 @@
 package ktb.week4.community.domain.user.entity;
 
+import ktb.week4.community.domain.user.enums.Status;
 import ktb.week4.community.global.common.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,6 +25,9 @@ public class User extends BaseEntity {
 	private String password;
 	
 	@Setter
+	private Status status;
+	
+	@Setter
 	private String profileImage;
 	
 	@Setter
@@ -33,6 +37,6 @@ public class User extends BaseEntity {
 	private ArrayList<Long> commentIds;
 	
 	public static User create(String nickname, String password, String email, String profileImage) {
-		return new User(null, nickname, email, password, profileImage, null, new ArrayList<>(), new ArrayList<>());
+		return new User(null, nickname, email, password, Status.ACTIVE, profileImage,  null, new ArrayList<>(), new ArrayList<>());
 	}
 }

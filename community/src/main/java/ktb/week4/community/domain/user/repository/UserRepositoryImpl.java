@@ -1,6 +1,7 @@
 package ktb.week4.community.domain.user.repository;
 
 import ktb.week4.community.domain.user.entity.User;
+import ktb.week4.community.domain.user.enums.Status;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
@@ -40,13 +41,15 @@ public class UserRepositoryImpl implements UserRepository {
 	
 	@Override
 	public void deleteById(Long userId) {
-		users.get(userId).setDeletedAt(LocalDateTime.now());
+		User user = users.get(userId);
+		user.setDeletedAt(LocalDateTime.now());
+		user.setStatus(Status.INACTIVE);
 	}
 	
 	@Override
 		public Optional<User> findById (Long id){
 			User user = users.get(id);
-			if (user == null || user.getDeletedAt() != null) {
+			if (user == null || user.getStatus() == Status.INACTIVE) {
 				return Optional.empty();
 			}
 			return Optional.of(user);
@@ -55,14 +58,14 @@ public class UserRepositoryImpl implements UserRepository {
 		@Override
 		public Optional<User> findByEmail (String email){
 			return users.values().stream()
-					.filter(user -> user.getDeletedAt() == null && user.getEmail().equals(email))
+					.filter(user -> user.getStatus() == Status.ACTIVE && user.getEmail().equals(email))
 					.findFirst();
 		}
 
 	@Override
 	public List<User> findByIds(List<Long> userIds) {
 		return users.values().stream()
-				.filter(user -> user.getDeletedAt() == null && userIds.contains(user.getId()))
+				.filter(user -> user.getStatus() == Status.ACTIVE && userIds.contains(user.getId()))
 				.collect(Collectors.toList());
 	}
 }

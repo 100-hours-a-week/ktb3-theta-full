@@ -26,7 +26,6 @@ public class CommentQueryService {
 		articleLoader.getArticleById(articleId);
 		
 		List<Comment> comments = commentRepository.findAllByArticleId(articleId, page, size);
-		long totalCount = commentRepository.countByArticleId(articleId);
 		
 		List<Long> userIds = comments.stream()
 				.map(Comment::getUserId)
@@ -45,6 +44,7 @@ public class CommentQueryService {
 				})
 				.collect(Collectors.toList());
 		
+		long totalCount = commentRepository.countByArticleId(articleId);
 		int totalPages = (int) Math.ceil((double) totalCount / size);
 		boolean isLast = page >= totalPages;
 		
